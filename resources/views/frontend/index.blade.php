@@ -61,7 +61,8 @@
 
     {{-- offline banner section --}}
 
-    <section class="mb-3">
+    @if(json_decode(get_setting('home_banner2_images'), true)) > 0)
+        <section class="mb-3">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -92,6 +93,7 @@
             </div>
         </div>
     </section>
+    @endif
     {{-- End offline banner section --}}
 
 
