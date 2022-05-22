@@ -60,44 +60,45 @@
     </div>
 
     {{-- offline banner section --}}
-    <div class="container banner_fetures">
-        <div class="row banner_main_row">
-            <div class="col-6">
-                <div class="card">
-                    <img src="{{ asset('offline_banner.jpg') }}" alt="" srcset="">
-                </div>
-            </div>
 
-            <div class="col-6">
-                <div class="row banner_row_top">
-                    <div class="col">
-
-                        <div class="card left-card-image">
-                            <img src="{{ asset('offline_banner.jpg') }}" alt="" srcset="" style="height: 65%;">
+    <section class="mb-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img class="img-fluid" style="height: 450px;" src="{{uploaded_asset(json_decode(get_setting('home_banner2_images'), true)[0]) }}" alt="">
                         </div>
-                    </div>
-                </div>
-                <div class="row banner_row_bottom">
-                    <div class="col">
-                        <div class="card">
-                            <img src="{{ asset('offline_banner.jpg') }}" alt="" srcset="">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <img src="{{ asset('offline_banner.jpg') }}" alt="" srcset="">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <img src="{{ asset('offline_banner.jpg') }}" alt="" srcset="">
+                        <div class="col-md-6">
+                            <div class="row pb-4">
+                                <div class="col-md-12">
+                                    <img class="img-fluid" style="height: 200px;width: 100%" src="{{uploaded_asset(json_decode(get_setting('home_banner2_images'), true)[1]) }}" alt="">
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-md-4">
+                                    <img class="img-fluid" style="height: 178px;" src="{{uploaded_asset(json_decode(get_setting('home_banner2_images'), true)[2]) }}" alt="">
+                                </div>
+                                <div class="col-md-4">
+                                    <img class="img-fluid" style="height: 178px;" src="{{uploaded_asset(json_decode(get_setting('home_banner2_images'), true)[3]) }}" alt="">
+                                </div>
+                                <div class="col-md-4">
+                                    <img class="img-fluid" style="height: 178px;" src="{{uploaded_asset(json_decode(get_setting('home_banner2_images'), true)[0]) }}" alt="">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
     {{-- End offline banner section --}}
+
+
+
+
+
+
 
 
     {{-- Best Selling --}}
@@ -113,23 +114,23 @@
 
         <div class="row">
             <div class="col-md-6">
-                <h4>প্রেসক্রিপশন এর মাধ্যমে অর্ডার করুন</h4>
+                <h4 style="color: #2b5b7b">প্রেসক্রিপশন এর মাধ্যমে অর্ডার করুন</h4>
                 <ul class="list-group bg-transparent">
                     <li class="list-group-item bg-transparent border-0 p-0">
-                        <h5>১. প্রেসক্রিপশন এর ছবি তুলে অথবা স্ক্যান করে আপলোড করুন।</h5>
+                        <h5 class="fs-24 my-3" style="color: #30698e">১. প্রেসক্রিপশন এর ছবি তুলে অথবা স্ক্যান করে আপলোড করুন।</h5>
                     </li>
                     <li class="list-group-item bg-transparent border-0 p-0">
-                        <h5>২. আমাদের ফার্মাসিস্ট আপনার প্রেসক্রিপশন পেয়ে আপনার দেয়া ফোন নাম্বারে যোগাযোগ করবে। ( সকাল ১০টা
+                        <h5 class="fs-24 my-3" style="color: #30698e">২. আমাদের ফার্মাসিস্ট আপনার প্রেসক্রিপশন পেয়ে আপনার দেয়া ফোন নাম্বারে যোগাযোগ করবে। ( সকাল ১০টা
                             থেকে রাত ১০টা )</h5>
                     </li>
                     <li class="list-group-item bg-transparent border-0 p-0">
-                        <h5>৩. ফার্মাসিস্ট আপনার সাথে কথা বলে ঔষধ সিলেক্ট করে অর্ডার কনফার্ম করবে।</h5>
+                        <h5 class="fs-24 my-3" style="color: #30698e">৩. ফার্মাসিস্ট আপনার সাথে কথা বলে ঔষধ সিলেক্ট করে অর্ডার কনফার্ম করবে।</h5>
                     </li>
                     <li class="list-group-item bg-transparent border-0 p-0">
-                        <h5>৪. নির্দিষ্ট সময়ে আপনার ঔষধ/পণ্য ডেলিভারী নিন।</h5>
+                        <h5 class="fs-24 my-3" style="color: #30698e">৪. নির্দিষ্ট সময়ে আপনার ঔষধ/পণ্য ডেলিভারী নিন।</h5>
                     </li>
                     <li class="list-group-item bg-transparent border-0 p-0">
-                        <h5>৫. ঔষধ ডেলিভারীর সময় আপনার প্রেসক্রিপশন প্রদর্শন করুন।</h5>
+                        <h5 class="fs-24 my-3" style="color: #30698e">৫. ঔষধ ডেলিভারীর সময় আপনার প্রেসক্রিপশন প্রদর্শন করুন।</h5>
                     </li>
                 </ul>
                 <button class="btn order-butotn">Upload Prescription</button>
