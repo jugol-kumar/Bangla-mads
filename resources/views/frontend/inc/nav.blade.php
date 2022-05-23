@@ -26,7 +26,7 @@
                 <div class="col-lg-7 sm_search_input_slid">
                     <div class="flex-grow-1 front-header-search d-flex align-items-center">
                         <div class="position-relative flex-grow-1">
-                            <p class="fs-20 fw-400 d-none d-lg-block text-main">আপনার ঔষধ খুঁজুন, অর্ডার করুন এবং দ্রুত ডেলিভারী নিন . . .</p>
+                            <p class="fs-20 fw-400 d-none d-lg-block text-main">{{ get_setting('header_search_title') ?? "null" }}</p>
                             <form action="{{ route('search') }}" method="GET" class="stop-propagation">
                                 <div class="d-flex position-relative align-items-center">
                                     <div class="d-lg-none" data-toggle="class-toggle"
@@ -110,14 +110,13 @@
                             </div>
                         </div>
                     @endauth
-                    <div class="d-none d-lg-block  align-self-stretch ml-3 mr-0" data-hover="dropdown">
-                        <div class="nav-cart-box dropdown h-100" id="cart_items">
-                            @include('frontend.partials.cart')
-                        </div>
-                    </div>
+{{--                    <div class="d-none d-lg-block  align-self-stretch ml-3 mr-0" data-hover="dropdown">--}}
+{{--                        <div class="nav-cart-box dropdown h-100" id="cart_items">--}}
+{{--                            @include('frontend.partials.cart')--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
                 </div>
-
             </div>
         </div>
     </div>

@@ -87,13 +87,13 @@ Route::group(['prefix' => 'panel', 'middleware' => ['auth', 'admin']], function(
     Route::post('/currency/store', 'CurrencyController@store')->name('currency.store');
     Route::post('/currency/currency_edit', 'CurrencyController@edit')->name('currency.edit');
     Route::post('/currency/update_status', 'CurrencyController@update_status')->name('currency.update_status');
-    
+
     //Tax
     Route::resource('tax', 'TaxController');
     Route::get('/tax/edit/{id}', 'TaxController@edit')->name('tax.edit');
     Route::get('/tax/destroy/{id}', 'TaxController@destroy')->name('tax.destroy');
     Route::post('tax-status', 'TaxController@change_tax_status')->name('taxes.tax-status');
-    
+
 
     Route::get('/verification/form', 'BusinessSettingsController@seller_verification_form')->name('seller_verification_form.index');
     Route::post('/verification/form', 'BusinessSettingsController@seller_verification_form_update')->name('seller_verification_form.update');
@@ -160,15 +160,20 @@ Route::group(['prefix' => 'panel', 'middleware' => ['auth', 'admin']], function(
 
     Route::post('/pay_to_seller', 'CommissionController@pay_to_seller')->name('commissions.pay_to_seller');
 
+    // Customer Prescription
+    Route::get('/customer/upload_prescription', 'OrderPrescriptoinController@index')->name('customer.prescription');
+    Route::get('/customer/show_prescription/{id}', 'OrderPrescriptoinController@show')->name('customer.show_prescription');
+
+
     //Reports
     Route::get('/stock_report', 'ReportController@stock_report')->name('stock_report.index');
     Route::get('/in_house_sale_report', 'ReportController@in_house_sale_report')->name('in_house_sale_report.index');
     Route::get('/seller_sale_report', 'ReportController@seller_sale_report')->name('seller_sale_report.index');
     Route::get('/wish_report', 'ReportController@wish_report')->name('wish_report.index');
     Route::get('/user_search_report', 'ReportController@user_search_report')->name('user_search_report.index');
-    
+
     Route::get('/wallet-history', 'ReportController@wallet_transaction_history')->name('wallet-history.index');
-    
+
     //Blog Section
     Route::resource('blog-category', 'BlogCategoryController');
     Route::get('/blog-category/destroy/{id}', 'BlogCategoryController@destroy')->name('blog-category.destroy');
@@ -195,7 +200,7 @@ Route::group(['prefix' => 'panel', 'middleware' => ['auth', 'admin']], function(
     Route::resource('pick_up_points', 'PickupPointController');
     Route::get('/pick_up_points/edit/{id}', 'PickupPointController@edit')->name('pick_up_points.edit');
     Route::get('/pick_up_points/destroy/{id}', 'PickupPointController@destroy')->name('pick_up_points.destroy');
-    
+
     //conversation of seller customer
     Route::get('conversations', 'ConversationController@admin_index')->name('conversations.admin_index');
     Route::get('conversations/{id}/show', 'ConversationController@admin_show')->name('conversations.admin_show');
