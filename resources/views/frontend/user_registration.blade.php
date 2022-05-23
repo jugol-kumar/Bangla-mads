@@ -81,7 +81,7 @@
                                         </div>
 
                                         <div class="mb-5">
-                                            <button type="submit" class="btn btn-primary bg-matt btn-block fw-600">{{  translate('Create Account') }}</button>
+                                            <button type="submit" class="btn btn-primary bg-main btn-block fw-600">{{  translate('Create Account') }}</button>
                                         </div>
                                     </form>
                                     @if(\App\BusinessSetting::where('type', 'google_login')->first()->value == 1 || \App\BusinessSetting::where('type', 'facebook_login')->first()->value == 1 || \App\BusinessSetting::where('type', 'twitter_login')->first()->value == 1)
