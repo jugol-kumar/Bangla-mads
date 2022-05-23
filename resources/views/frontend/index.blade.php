@@ -139,7 +139,7 @@
             </div>
 
             <div class="col-md-6">
-                <img class="img-fluid" src="{{ asset('upload_pres2.jpg') }}" alt="">
+                <img class="img-fluid" src="{{ static_asset('upload_pres2.jpg') }}" alt="">
             </div>
 
         </div>

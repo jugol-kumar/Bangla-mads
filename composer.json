@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": "^7.3|^8.0",
+        "facade/ignition": "^2.3.6",
         "fideloper/proxy": "^4.0",
         "gabrielbull/ups-api": "2.0.4",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -17,13 +18,13 @@
         "laravel/passport": "10.0",
         "laravel/socialite": "5.5.2",
         "laravel/tinker": "^2.0",
+        "laravel/ui": "^3.0",
         "lcobucci/jwt": "3.3.3",
         "league/flysystem-aws-s3-v3": "^1.0",
         "maatwebsite/excel": "^3.1",
         "niklasravnsborg/laravel-pdf": "^4.0",
         "spatie/db-dumper": "^2.17",
-        "facade/ignition" : "^2.3.6",
-        "laravel/ui" :"^3.0"
+        "symfony/symfony": "5.4.x"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
