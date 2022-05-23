@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    {{-- offline banner section --}}
+    {{-- offline banner section dd--}}
 
     @if(json_decode(get_setting('home_banner2_images'), true))
         <section class="mb-3">
