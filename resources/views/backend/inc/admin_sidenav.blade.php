@@ -92,10 +92,19 @@
                             </a>
                         </li>
                         @endif
+
                         @if(Auth::user()->user_type == 'admin' || in_array('6', json_decode(Auth::user()->staff->role->permissions)))
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('pick_up_point.order_index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['pick_up_point.order_index','pick_up_point.order_show'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Pick-up Point Order')}}</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if(Auth::user()->user_type == 'admin' || in_array('6', json_decode(Auth::user()->staff->role->permissions)))
+                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('customer.prescription') }}" class="aiz-side-nav-link {{ areActiveRoutes(['customer.prescription','pick_up_point.order_show'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Customer Prescription')}}</span>
                                 </a>
                             </li>
                         @endif
@@ -270,7 +279,7 @@
                                     <span class="aiz-side-nav-text">{{ translate('Vendor Commission') }}</span>
                                 </a>
                             </li>
-                            
+
                             @if (\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated)
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('seller_packages.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller_packages.index', 'seller_packages.create', 'seller_packages.edit'])}}">
@@ -291,7 +300,7 @@
                         </ul>
                     </li>
                 @endif
-                
+
 
                 <!-- Support -->
                 @if(Auth::user()->user_type == 'admin' || in_array('12', json_decode(Auth::user()->staff->role->permissions)))
@@ -531,7 +540,7 @@
                                 <span class="aiz-side-nav-text">{{translate('Analytics Tools')}}</span>
                             </a>
                         </li>
-                        
+
                         <li class="aiz-side-nav-item">
                             <a href="javascript:void(0);" class="aiz-side-nav-link">
                                 <span class="aiz-side-nav-text">{{translate('Facebook Settings')}}</span>
@@ -550,13 +559,13 @@
                                 </li>
                             </ul>
                         </li>
-                        
+
                         <li class="aiz-side-nav-item">
                             <a href="{{ route('google_recaptcha.index') }}" class="aiz-side-nav-link">
                                 <span class="aiz-side-nav-text">{{translate('Google reCAPTCHA Setup')}}</span>
                             </a>
                         </li>
-                        
+
                         <li class="aiz-side-nav-item">
                             <a href="javascript:void(0);" class="aiz-side-nav-link">
                                 <span class="aiz-side-nav-text">{{translate('Shipping Management')}}</span>
@@ -580,11 +589,11 @@
                                 </li>
                             </ul>
                         </li>
-                        
+
                     </ul>
                 </li>
                 @endif
-                
+
 
                 <!-- Refund addon -->
                 @if (\App\Addon::where('unique_identifier', 'refund_request')->first() != null && \App\Addon::where('unique_identifier', 'refund_request')->first()->activated)

@@ -8,13 +8,18 @@
 
     </div> --}}
     <ul class="list-unstyled">
-        @foreach ( json_decode(get_setting('top10_categories')) as $key => $val)
+{{--        {{ dd(json_decode(get_setting('top10_categories'))) }}--}}
+        @forelse( json_decode(get_setting('top10_categories')) as $key => $val)
             @php( $category = \App\Category::findOrFail($val))
-            <li class="py-2 categoryList">
-                <a class="text-reset fs-18"
-                   href="{{ route('products.category', $category->slug) }}">{{ $category->getTranslation('name') }}
-                </a>
-            </li>
-        @endforeach
+            @if($category)
+                <li class="py-2 categoryList">
+                    <a class="text-reset fs-18"
+                       href="{{ route('products.category', $category->slug) }}">{{ $category->getTranslation('name') }}
+                    </a>
+                </li>
+            @endif
+        @empty
+            <h2>No Have Category</h2>
+        @endforelse
     </ul>
 </div>

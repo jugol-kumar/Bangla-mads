@@ -62,6 +62,16 @@
 							</label>
 						</div>
 					</div>
+
+
+	                <div class="form-group row">
+						<label class="col-md-3 col-from-label">{{translate('Header Search Bar Title')}}</label>
+						<div class="col-md-8">
+                            <input type="hidden" name="types[]" value="header_search_title">
+                            <input type="text" name="header_search_title"  class="form-control" value="{{ get_setting('header_search_title') ?? "null" }}">
+						</div>
+					</div>
+
 					<div class="form-group row border-top pt-3">
 	                    <label class="col-md-3 col-from-label">{{ translate('Topbar Banner') }}</label>
 						<div class="col-md-8">

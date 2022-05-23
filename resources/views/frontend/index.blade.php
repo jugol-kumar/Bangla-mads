@@ -4,11 +4,9 @@
     <div class="home-banner-area mb-4 pt-3">
         <div class="container">
             <div class="row gutters-10">
-
                 <div class="col-lg-12">
                     <div class="position-relative ">
                         <div class="position-absolute left-7 right-0 d-none d-lg-block" style="z-index: 999;">
-                            {{-- @include('frontend.partials.category_menu') --}}
                         </div>
                         @if (get_setting('home_slider_images') != null)
                             <div class="aiz-carousel dots-inside-bottom mobile-img-auto-height" data-arrows="true"
@@ -29,39 +27,13 @@
                     </div>
                 </div>
 
-                {{-- <div class="col-lg-12">
-
-                    @php
-                        $featured_categories = \App\Category::where('featured', 1)->get();
-                    @endphp
-                    @if (count($featured_categories) > 0)
-                        <ul class="list-unstyled mb-0 row gutters-5">
-                            @foreach ($featured_categories as $key => $category)
-                                <li class="minw-0 col-4 col-md mt-3">
-                                    <a href="{{ route('products.category', $category->slug) }}"
-                                        class="d-block rounded bg-white p-2 text-reset shadow-sm">
-                                        <img src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                            data-src="{{ uploaded_asset($category->banner) }}"
-                                            alt="{{ $category->getTranslation('name') }}" class="lazyload img-fit"
-                                            height="78"
-                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder-rect.jpg') }}';">
-                                        <div class="text-truncate fs-12 fw-600 mt-2 opacity-70">
-                                            {{ $category->getTranslation('name') }}</div>
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </div> --}}
-
-
             </div>
         </div>
     </div>
 
     {{-- offline banner section --}}
 
-    @if(json_decode(get_setting('home_banner2_images'), true)) > 0)
+    @if(json_decode(get_setting('home_banner2_images'), true))
         <section class="mb-3">
         <div class="container">
             <div class="row">

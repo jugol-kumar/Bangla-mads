@@ -1,33 +1,4 @@
-{{-- <section class="bg-white border-top mt-auto">
-    <div class="container">
-        <div class="row no-gutters">
-            <div class="col-lg-3 col-md-6">
-                <a class="text-reset border-left text-center p-4 d-block" href="{{ route('terms') }}">
-                    <i class="la la-file-text la-3x text-primary mb-2"></i>
-                    <h4 class="h6">{{ translate('Terms & conditions') }}</h4>
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <a class="text-reset border-left text-center p-4 d-block" href="{{ route('returnpolicy') }}">
-                    <i class="la la-mail-reply la-3x text-primary mb-2"></i>
-                    <h4 class="h6">{{ translate('Return Policy') }}</h4>
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <a class="text-reset border-left text-center p-4 d-block" href="{{ route('supportpolicy') }}">
-                    <i class="la la-support la-3x text-primary mb-2"></i>
-                    <h4 class="h6">{{ translate('Support Policy') }}</h4>
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <a class="text-reset border-left border-right text-center p-4 d-block" href="{{ route('privacypolicy') }}">
-                    <i class="las la-exclamation-circle la-3x text-primary mb-2"></i>
-                    <h4 class="h6">{{ translate('Privacy Policy') }}</h4>
-                </a>
-            </div>
-        </div>
-    </div>
-</section> --}}
+
 
 <section class="bg-white py-5 text-light footer-widget">
     <div class="container">
@@ -97,7 +68,7 @@
 <footer class="pt-3 pb-7 pb-xl-3 bg-white text-black ">
     <div class="container border-top footer_boder_color">
         <div class="row align-items-center pt-3 justify-content-between sm_displya_style_end_footer">
-                <p>Developed and maintained with love by Trenza Softwares</p>
+                <p>Developed and maintained with love by <a href="https://creativetechpark.com/">Creative Take park</a></p>
                 <p>
                     @php
                         echo get_setting('frontend_copyright_text');
