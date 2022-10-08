@@ -34,6 +34,15 @@ Route::group(['prefix' => 'panel', 'middleware' => ['auth', 'admin']], function(
     Route::post('/products/featured', 'ProductController@updateFeatured')->name('products.featured');
     Route::post('/products/get_products_by_subcategory', 'ProductController@get_products_by_subcategory')->name('products.get_products_by_subcategory');
 
+
+    Route::get('/medicines/admin/index', 'MedicineController@index')->name('medicine.index');
+    Route::get('/medicines/admin/create', 'MedicineController@create')->name('medicine.create');
+    Route::post('/medicines/admin/store', 'MedicineController@store')->name('medicine.store');
+    Route::get('/medicines/admin/{id}/edit', 'MedicineController@edit')->name('medicine.edit');
+    Route::put('/medicines/admin/{id}/update', 'MedicineController@update')->name('medicine.update');
+    Route::get('/medicines/admin/{id}/delete', 'MedicineController@delete')->name('medicine.delete');
+
+
     Route::resource('sellers', 'SellerController');
     Route::get('investors', 'HomeController@invest_list')->name('investors');
     Route::get('sellers_ban/{id}', 'SellerController@ban')->name('sellers.ban');

@@ -112,6 +112,7 @@
                 </li>
 
                 <!-- Product -->
+                {{--
                 @if(Auth::user()->user_type == 'admin' || in_array('2', json_decode(Auth::user()->staff->role->permissions)))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
@@ -161,6 +162,39 @@
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('attributes.index')}}" class="aiz-side-nav-link {{ areActiveRoutes(['attributes.index','attributes.create','attributes.edit'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Product Attribute')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('reviews.index')}}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Product Reviews')}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
+                --}}
+                @if(Auth::user()->user_type == 'admin' || in_array('2', json_decode(Auth::user()->staff->role->permissions)))
+                    <li class="aiz-side-nav-item">
+                        <a href="#" class="aiz-side-nav-link">
+                            <i class="lab la-product-hunt aiz-side-nav-icon"></i>
+                            <span class="aiz-side-nav-text">{{translate('Product Section')}}</span>
+                            <span class="aiz-side-nav-arrow"></span>
+                        </a>
+                        <!--Submenu-->
+                        <ul class="aiz-side-nav-list level-2">
+                            <li class="aiz-side-nav-item">
+                                <a class="aiz-side-nav-link" href="{{route('medicine.create')}}">
+                                    <span class="aiz-side-nav-text">{{translate('Create Product')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('medicine.index')}}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ translate('Product Catalog') }}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('categories.index')}}" class="aiz-side-nav-link {{ areActiveRoutes(['categories.index', 'categories.create', 'categories.edit'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Product Category')}}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">

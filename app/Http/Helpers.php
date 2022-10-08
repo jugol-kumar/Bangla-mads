@@ -73,7 +73,7 @@ if (! function_exists('sendSMS')) {
             curl_close($ch);
 
             return $response;
-            
+
         }
     }
 }
@@ -365,7 +365,8 @@ if (! function_exists('home_base_price')) {
 if (! function_exists('home_discounted_base_price')) {
     function home_discounted_base_price($id)
     {
-        $product = Product::findOrFail($id);
+//        $product = Product::findOrFail($id);
+        $product = \App\Models\Medicine::findOrFail($id);
         $price = $product->unit_price;
 
         $flash_deals = \App\FlashDeal::where('status', 1)->get();
@@ -704,11 +705,11 @@ function getShippingCost($index){
 
     $cartItem = Session::get('cart')[$index];
     $product = \App\Product::find($cartItem['id']);
-    
+
     if($product->digital == 1) {
         return $calculate_shipping = 0;
     }
-    
+
     if (get_setting('shipping_type') == 'flat_rate') {
         return $calculate_shipping/count(Session::get('cart'));
     }
@@ -946,5 +947,17 @@ if (!function_exists('get_images_path')) {
 
     }
 }
+
+if(!function_exists('packet_price')){
+    function packet_price($packetPrice)
+    {
+        if ($packetPrice != null){
+            $price = explode("৳", $packetPrice);
+            $float = preg_replace('/[^0-9\.]/', "", $price[1]);
+            return $float;
+        }
+    }
+}
+
 
 ?>

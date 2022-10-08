@@ -1,4 +1,12 @@
 /*your custom css goes here*/
+:root{
+    --main-bg: #f3f7fb;
+}
+
+.row-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
 .bg-yellow {
     background-color: #f19426!important;
 }
@@ -222,7 +230,14 @@ padding: 0.3rem 1.2rem;
 .border-radius-5{
     border-radius: 5px !important;
 }
-
+.medicin_card {
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 3px 5px -2px rgb(0 0 0 / 8%), 0 3px 6px 0 rgb(0 0 0 / 4%), 0 1px 12px 0 rgb(0 0 0 / 7%);
+}
+.prescription-section h5{
+    font-size: 20px !important;
+}
 /* why chose us section style*/
 #whyChoseUs .col{
     padding: 0;
@@ -473,7 +488,7 @@ padding: 0.3rem 1.2rem;
 .side-cart .mini-cart span.item-count {
     background: #04b0f0 url("https://www.banglameds.com.bd/skin/frontend/banglamed/default/images/cart-white.png") no-repeat scroll center 7px;
     color: #fff;
-    padding: 40px 10px 6px;
+    padding: 30px 10px 6px;
 }
 
 .side-cart .mini-cart span {
@@ -886,7 +901,7 @@ div#header-cart a.btn-edit {
     font-size: 17px;
     font-weight: 500;
     padding-top: 20px;
-    border-top: 1px dotted #04b0f0;
+    border-top: 1px dotted var(--main-bg);
 }
 .searchAddToCart{
     padding: 0px 20px;
@@ -899,7 +914,187 @@ div#header-cart a.btn-edit {
 .search_product_list tbody tr td .sm_quantity{
     height: calc(1.3125rem + 1.2rem + -6px);
 }
+
+
+/* left sidebar menu classes*/
+.left-sidebar{
+    width: 17%;
+    z-index: 11;
+    height: 100%;
+    position: fixed;
+    box-shadow: 1px 5px 12px 2px #76767691;
+}
+.main-content-style{
+    width: 82%;
+    margin-left: 15%;
+    background:  var(--main-bg);;
+}
+
+
+.left-sidebar .navbar{
+    padding: 0;
+    font-size: 15px;
+}
+
+
+.left-sidebar .navbar .navbar-nav{
+    width: 100%;
+}
+.nav-item{
+    width: 100%;
+    padding: 6px 0px 6px 13px
+}
+.left-sidebar .navbar .navbar-nav .nav-item .nav-link{
+    color: #000000;
+    padding: 0;
+    font-size: 13px;
+}
+.left-sidebar .navbar .navbar-nav .nav-item:hover{
+    background: whitesmoke;
+}
+.left-sidebar .navbar .navbar-nav .nav-item .dropdown-toggle:after{
+    float: right !important;
+    content: " ";
+}
+.category-icon{
+    width: 30px;
+    height: 30px;
+}
+.left-sidebar .navbar .collapse{
+    margin-left: 2.3rem;
+}
+
+.upload-res{
+    padding: 18px 0px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #ddeeff;
+    background: #f3f7fb;
+    text-align: center;
+    width: 99.9%;
+    font-size: 12px;
+}
+.details_header{
+    padding: 3px 11px;
+    background: linear-gradient(179deg, #04b0f080 , #0479a5);
+    color: white;
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+.rdio {
+    position: relative;
+}
+.rdio input[type=radio] {
+    opacity: 0;
+}
+.rdio label {
+    padding-left: 10px;
+    cursor: pointer;
+    margin-bottom: 7px !important;
+}
+.rdio label:before {
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    content: "";
+    display: inline-block;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+    border: 1px solid #fbc52d;
+    background: #fff;
+}
+.rdio input[type=radio] {
+    margin: 0px;
+}
+.rdio input[type=radio]:disabled + label {
+    color: #999;
+}
+.rdio input[type=radio]:disabled + label:before {
+    background-color: #fbc52d;
+}
+.rdio input[type=radio]:checked + label::after {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 4px;
+    display: inline-block;
+    font-size: 11px;
+    width: 10px;
+    height: 10px;
+    background-color: #fbc52d;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+}
+
+.rdio-default input[type=radio]:checked + label:before {
+    border-color: #fbc52d;
+}
+
+.rdio-primary input[type=radio]:checked + label:before {
+    border-color: #fbc52d;
+}
+.rdio-primary input[type=radio]:checked + label::after {
+    background-color: #fbc52d;
+}
+
 /*serach product listing table search_product_list*/
+
+
+/*back to top design button*/
+#backToTop {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border-radius: 4px;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    transition: background-color .3s,
+    opacity .5s, visibility .5s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+    color: #FFFFFF;
+}
+#backToTop::after {
+    content: " ";
+    font-family: "font awesome";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 2em;
+    line-height: 50px;
+    color: #fff;
+}
+#backToTop:hover {
+    cursor: pointer;
+    background-color: #333;
+}
+#backToTop:active {
+    background-color: #555;
+}
+#backToTop.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @media(max-width: 500px){
     .min_d_none{

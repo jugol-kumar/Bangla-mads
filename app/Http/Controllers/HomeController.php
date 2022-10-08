@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Medicine;
 use App\Models\UserPrescription;
 use Illuminate\Http\Request;
 use Session;
@@ -30,6 +31,7 @@ use Mail;
 use App\Utility\TranslationUtility;
 use App\Utility\CategoryUtility;
 use Illuminate\Auth\Events\PasswordReset;
+use function Symfony\Component\String\s;
 
 
 class HomeController extends Controller
@@ -247,6 +249,7 @@ class HomeController extends Controller
         return view('frontend.track_order');
     }
 
+    /*
     public function product(Request $request, $slug)
     {
         $detailedProduct  = Product::where('slug', $slug)->first();
@@ -280,6 +283,17 @@ class HomeController extends Controller
         }
         abort(404);
     }
+    */
+    public function product(Request $request, $slug, $id)
+    {
+        $detailedProduct  = Medicine::findOrFail($id);
+        if($detailedProduct != null){
+            return view('frontend.product_details', compact('detailedProduct'));
+        }
+        abort(404);
+    }
+
+
 
     public function shop($slug)
     {
@@ -406,6 +420,29 @@ class HomeController extends Controller
         return $this->search($request);
     }
 
+    public function categoryDetails(Request $request, $slug){
+
+        if ($slug == null){
+            return back();
+        }
+        $category = Category::where('slug', $slug)->first();
+        $products = Medicine::where('category_id', $category->id)->where('publication_status', 1)->paginate(20);
+
+//        $s = $products[1]->pack_Price;
+//        $price = explode("৳", $s);
+//        $float = preg_replace('/[^0-9\.]/', "", $price[1]);
+//        return  $float;
+
+
+
+        if ($request->ajax()){
+            $view = view('frontend.partials.loadmore_product_listing', compact('products'))->render();
+            return response()->json(['view' => $view]);
+        }
+        return view("frontend.single_category_details", compact('products', 'category'));
+    }
+
+
     public function listingByCategory(Request $request, $category_slug)
     {
         $category = Category::where('slug', $category_slug)->first();
@@ -458,6 +495,7 @@ class HomeController extends Controller
                     $category_ids[] = intval($category_id);
                     $products = $products->whereIn('category_id', $category_ids);
                 }
+
                 $products = $products->where('id', '<', $request->request_product_id);
 
 
@@ -553,8 +591,6 @@ class HomeController extends Controller
         }
 
         $products = Product::where($conditions);
-
-
 
 
 
@@ -703,8 +739,6 @@ class HomeController extends Controller
 
         $products = filter_products($products)->paginate(12)->appends(request()->query());
 
-
-
         return view('frontend.product_listing', compact( 'products', 'nonPagisateProducts', 'query', 'category_id', 'brand_id', 'sort_by', 'seller_id','min_price', 'max_price', 'attributes', 'selected_attributes', 'all_colors', 'selected_color','city_id'));
     }
 
@@ -715,6 +749,13 @@ class HomeController extends Controller
 
         }
     }
+/*
+    public function categoryProductLoader(Request $request){
+        $category_id = $request->category_id;
+
+        $load_more = Medicine::where('id', '>', $request->request_product_id)->where('category_id', $category_id)->take(20)->get();
+        return view('frontend.partials.loadmore_product_listing', compact('load_more'));
+    }*/
 
 
 

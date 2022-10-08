@@ -4,45 +4,28 @@
 
 <div class="aiz-titlebar text-left mt-2 mb-3">
     <div class="row align-items-center">
-        @if($type != 'Seller')
         <div class="col">
-            <a href="{{ route('products.create') }}" class="btn btn-circle btn-secondary">
+            <a href="{{ route('medicine.create') }}" class="btn btn-circle btn-secondary">
                 <span>{{translate('Add New Product')}}</span>
             </a>
         </div>
-        @endif
     </div>
 </div>
 <br>
 
 <div class="card">
+
     <form class="" id="sort_products" action="" method="GET">
         <div class="card-header row gutters-5">
             <div class="col text-center text-md-left">
                 <h5 class="mb-md-0 h6">{{ translate('All Product') }}</h5>
             </div>
-            @if($type == 'Seller')
             <div class="col-md-2 ml-auto">
                 <select class="form-control form-control-sm aiz-selectpicker mb-2 mb-md-0" id="user_id" name="user_id" onchange="sort_products()">
-                    <option value="">{{ translate('All Sellers') }}</option>
-                    @foreach (App\Seller::all() as $key => $seller)
-                        @if ($seller->user != null && $seller->user->shop != null)
-                            <option value="{{ $seller->user->id }}" @if ($seller->user->id == $seller_id) selected @endif>{{ $seller->user->shop->name }} ({{ $seller->user->name }})</option>
-                        @endif
-                    @endforeach
+                    <option value="">{{ translate('Generic') }}</option>
+
                 </select>
             </div>
-            @endif
-            @if($type == 'All')
-            <div class="col-md-2 ml-auto">
-                <select class="form-control form-control-sm aiz-selectpicker mb-2 mb-md-0" id="user_id" name="user_id" onchange="sort_products()">
-                    <option value="">{{ translate('All Sellers') }}</option>
-                        @foreach (App\User::where('user_type', '=', 'admin')->orWhere('user_type', '=', 'seller')->get() as $key => $seller)
-                            <option value="{{ $seller->id }}" @if ($seller->id == $seller_id) selected @endif>{{ $seller->name }}</option>
-                        @endforeach
-                </select>
-            </div>
-            @endif
             <div class="col-md-2 ml-auto">
                 <select class="form-control form-control-sm aiz-selectpicker mb-2 mb-md-0" name="type" id="type" onchange="sort_products()">
                     <option value="">{{ translate('Sort By') }}</option>
@@ -61,18 +44,18 @@
             </div>
         </div>
     </form>
+
+
         <div class="card-body">
             <table class="table aiz-table mb-0">
                 <thead>
                     <tr>
                         <th data-breakpoints="lg">#</th>
-                        <th width="30%">{{translate('Name')}}</th>
-                        @if($type == 'Seller' || $type == 'All')
-                            <th data-breakpoints="lg">{{translate('Added By')}}</th>
-                        @endif
-                        <th data-breakpoints="lg">{{translate('Info')}}</th>
-                        <th data-breakpoints="lg">{{translate('Total Stock')}}</th>
-                        <th data-breakpoints="lg">{{translate('Todays Deal')}}</th>
+                        <th width="20%">{{translate('Name')}}</th>
+                        <th data-breakpoints="lg">{{translate('Category')}}</th>
+                        <th data-breakpoints="lg">{{translate('type')}}</th>
+                        <th data-breakpoints="lg">{{translate('Generic')}}</th>
+                        <th data-breakpoints="lg">{{translate('Price')}}</th>
                         <th data-breakpoints="lg">{{translate('Published')}}</th>
                         <th data-breakpoints="lg">{{translate('Featured')}}</th>
                         <th data-breakpoints="lg" class="text-right">{{translate('Options')}}</th>
@@ -85,50 +68,30 @@
                         <td>
                             <div class="row gutters-5">
                                 <div class="col-auto">
-                                    <img src="{{ uploaded_asset($product->thumbnail_img)}}" alt="Image" class="size-50px img-fit">
+                                    <img src="{{ uploaded_asset($product->photo ?? $product->category->icon)}}" alt="Image" class="size-50px img-fit">
                                 </div>
                                 <div class="col">
-                                    <span class="text-muted text-truncate-2">{{ $product->getTranslation('name') }}</span>
+                                    <strong class="text-muted text-truncate-2">{{ $product->name }}</strong>
                                 </div>
                             </div>
                         </td>
-                        @if($type == 'Seller' || $type == 'All')
-                            @if($product->user)
-                                <td>{{ $product->user->name ?? " " }}</td>
-                            @endif
-                        @endif
                         <td>
-                            <strong>Num of Sale:</strong> {{ $product->num_of_sale }} {{translate('times')}} </br>
-                            <strong>Base Price:</strong> {{ single_price($product->unit_price) }} </br>
-                            <strong>Rating:</strong> {{ $product->rating }} </br>
+                            {{ $product->category->name }}
                         </td>
                         <td>
-                            @php
-                                $qty = 0;
-                                if($product->variant_product) {
-                                    foreach ($product->stocks as $key => $stock) {
-                                        $qty += $stock->qty;
-                                        echo $stock->variant.' - '.$stock->qty.'<br>';
-                                    }
-                                }
-                                else {
-                                    $qty = $product->current_stock;
-                                    echo $qty;
-                                }
-                            @endphp
-                            @if($qty <= $product->low_stock_quantity)
-                                <span class="badge badge-inline badge-danger">Low</span>
-                            @endif
+                            <span>{{ $product->type }}</span>
                         </td>
+                        <td>
+                            {{ $product->generic }}
+                        </td>
+                        <td>
+                            <strong>Single Price:</strong> {{ $product->single_price }}</br>
+                            <strong>Base Price:</strong> {{ $product->pack_Price }} </br>
+                        </td>
+
                         <td>
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input onchange="update_todays_deal(this)" value="{{ $product->id }}" type="checkbox" <?php if ($product->todays_deal == 1) echo "checked"; ?> >
-                                <span class="slider round"></span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="aiz-switch aiz-switch-success mb-0">
-                                <input onchange="update_published(this)" value="{{ $product->id }}" type="checkbox" <?php if ($product->published == 1) echo "checked"; ?> >
+                                <input onchange="update_published(this)" value="{{ $product->id }}" type="checkbox" <?php if ($product->publication_status == 1) echo "checked"; ?> >
                                 <span class="slider round"></span>
                             </label>
                         </td>
@@ -138,23 +101,45 @@
                                 <span class="slider round"></span>
                             </label>
                         </td>
+
+                        {{--
+                               <td>
+                                   @php
+                                       $qty = 0;
+                                       if($product->variant_product) {
+                                           foreach ($product->stocks as $key => $stock) {
+                                               $qty += $stock->qty;
+                                               echo $stock->variant.' - '.$stock->qty.'<br>';
+                                           }
+                                       }
+                                       else {
+                                           $qty = $product->current_stock;
+                                           echo $qty;
+                                       }
+                                   @endphp
+                                   @if($qty <= $product->low_stock_quantity)
+                                       <span class="badge badge-inline badge-danger">Low</span>
+                                   @endif
+                               </td>
+                               --}}
+                        {{--
+                        <td>
+                            <label class="aiz-switch aiz-switch-success mb-0">
+                                <input onchange="update_todays_deal(this)" value="{{ $product->id }}" type="checkbox" <?php if ($product->todays_deal == 1) echo "checked"; ?> >
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
+                        --}}
                         <td class="text-right">
-                            <a class="btn btn-soft-success btn-icon btn-circle btn-sm"  href="{{ route('product', $product->slug) }}" target="_blank" title="{{ translate('View') }}">
+                            <a class="btn btn-soft-success btn-icon btn-circle btn-sm"  href="{{ route('product', ['slug' => $product->name, 'id' => $product->id]) }}" target="_blank" title="{{ translate('View') }}">
                                 <i class="las la-eye"></i>
                             </a>
-                            @if ($type == 'Seller')
-                            <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('products.seller.edit', ['id'=>$product->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}" title="{{ translate('Edit') }}">
+                            <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('medicine.edit', ['id'=>$product->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}" title="{{ translate('Edit') }}">
                                 <i class="las la-edit"></i>
                             </a>
-                            @else
-                            <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('products.admin.edit', ['id'=>$product->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}" title="{{ translate('Edit') }}">
-                                <i class="las la-edit"></i>
-                            </a>
-                            @endif
-                            <a class="btn btn-soft-warning btn-icon btn-circle btn-sm" href="{{route('products.duplicate', ['id'=>$product->id, 'type'=>$type]  )}}" title="{{ translate('Duplicate') }}">
-                                <i class="las la-copy"></i>
-                            </a>
-                            <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('products.destroy', $product->id)}}" title="{{ translate('Delete') }}">
+
+                            <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
+                               data-href="{{route('medicine.delete', $product->id)}}" title="{{ translate('Delete') }}">
                                 <i class="las la-trash"></i>
                             </a>
                         </td>

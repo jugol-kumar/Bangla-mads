@@ -24,20 +24,17 @@
                                     @endphp
                                     @foreach (Session::get('cart') as $key => $cartItem)
                                         @php
-                                            $product = \App\Product::find($cartItem['id']);
+                                            $product = \App\Models\Medicine::find($cartItem['id']);
                                             $total = $total + $cartItem['price'] * $cartItem['quantity'];
-                                            $product_name_with_choice = $product->getTranslation('name');
-                                            if ($cartItem['variant'] != null) {
-                                                $product_name_with_choice = $product->getTranslation('name') . ' - ' . $cartItem['variant'];
-                                            }
+                                            $product_name_with_choice = $product->name;
                                         @endphp
                                         <li class="list-group-item px-0 px-lg-3">
                                             <div class="row gutters-5">
                                                 <div class="col-lg-5 d-flex">
                                                     <span class="mr-2 ml-0">
-                                                        <img src="{{ uploaded_asset($product->thumbnail_img) }}"
+                                                        <img src="{{ uploaded_asset($product->category->icon) }}"
                                                             class="img-fit size-60px rounded"
-                                                            alt="{{ $product->getTranslation('name') }}">
+                                                            alt="{{ $product->name}}">
                                                     </span>
                                                     <span class="fs-14 opacity-60">{{ $product_name_with_choice }}</span>
                                                 </div>
@@ -97,26 +94,10 @@
                                     @endforeach
                                 </ul>
                             </div>
-
                             <div class="px-3 py-2 mb-4 border-top d-flex justify-content-between">
                                 <span class="opacity-60 fs-15">{{ translate('Subtotal') }}</span>
                                 <span class="fw-600 fs-17">{{ single_price($total) }}</span>
                             </div>
-                            {{-- <div class="row align-items-center">
-                            <div class="col-md-6 text-center text-md-left order-1 order-md-0">
-                                <a href="{{ route('home') }}" class="btn btn-link">
-                                    <i class="las la-arrow-left"></i>
-                                    {{ translate('Return to shop')}}
-                                </a>
-                            </div>
-                            <div class="col-md-6 text-center text-md-right">
-                                @if (Auth::check())
-                                    <a href="{{ route('checkout.shipping_info') }}" class="btn btn-primary fw-600">{{ translate('Continue to Shipping')}}</a>
-                                @else
-                                    <button class="btn btn-primary fw-600" onclick="showCheckoutModal()">{{ translate('Continue to Shipping')}}</button>
-                                @endif
-                            </div>
-                        </div> --}}
                         </div>
                     </div>
                 </div>
@@ -229,7 +210,7 @@
                                                         name="city" required>
                                                         @foreach (\App\City::get() as $key => $city)
                                                             <option value="{{ $city->name }}">
-                                                                {{ $city->getTranslation('name') }}</option>
+                                                                {{ $city->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 @else
@@ -275,240 +256,46 @@
                     </div>
                     <div class="row cols-xs-space cols-sm-space cols-md-space">
                         <div class="col-xxl-10 col-xl-11 mx-auto text-left">
-                            @php
-                                $admin_products = [];
-                                $seller_products = [];
-                                foreach (Session::get('cart') as $key => $cartItem) {
-                                    if (\App\Product::find($cartItem['id'])->added_by == 'admin') {
-                                        array_push($admin_products, $cartItem['id']);
-                                    } else {
-                                        $product_ids = [];
-                                        if (array_key_exists(\App\Product::find($cartItem['id'])->user_id, $seller_products)) {
-                                            $product_ids = $seller_products[\App\Product::find($cartItem['id'])->user_id];
-                                        }
-                                        array_push($product_ids, $cartItem['id']);
-                                        $seller_products[\App\Product::find($cartItem['id'])->user_id] = $product_ids;
-                                    }
-                                }
-                            @endphp
+                @php
+                    $admin_products = [];
+                    $seller_products = [];
+                    foreach (Session::get('cart') as $key => $cartItem) {
+                        $product_ids = [];
+                        if (array_key_exists(\App\Models\Medicine::find($cartItem['id'])->user_id, $seller_products)) {
+                            $product_ids = $seller_products[\App\Models\Medicine::find($cartItem['id'])->user_id];
+                        }
+                        array_push($product_ids, $cartItem['id']);
+                        $seller_products[\App\Models\Medicine::find($cartItem['id'])->user_id] = $product_ids;
+                    }
+                @endphp
 
-                            @if (!empty($admin_products))
-                                <div class="card mb-3 shadow-sm border-0 rounded">
-                                    <div class="card-header p-3">
-                                        <h5 class="fs-16 fw-600 mb-0">{{ get_setting('site_name') }}
-                                            {{ translate('Products') }}</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <ul class="list-group list-group-flush">
-                                            @foreach ($admin_products as $key => $cartItem)
-                                                @php
-                                                    $product = \App\Product::find($cartItem);
-                                                @endphp
-                                                <li class="list-group-item">
-                                                    <div class="d-flex">
-                                                        <span class="mr-2">
-                                                            <img src="{{ uploaded_asset($product->thumbnail_img) }}"
-                                                                class="img-fit size-60px rounded"
-                                                                alt="{{ $product->getTranslation('name') }}">
-                                                        </span>
-                                                        <span
-                                                            class="fs-14 opacity-60">{{ $product->getTranslation('name') }}</span>
-                                                    </div>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                        @if (\App\BusinessSetting::where('type', 'pickup_point')->first()->value == 1)
-                                            <div class="row border-top pt-3">
-                                                <div class="col-md-6">
-                                                    <h6 class="fs-15 fw-600">{{ translate('Choose Delivery Type') }}</h6>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="row gutters-5">
-                                                        <div class="col-6">
-                                                            <label class="aiz-megabox d-block bg-white mb-0">
-                                                                <input type="radio"
-                                                                    name="shipping_type_{{ \App\User::where('user_type', 'admin')->first()->id }}"
-                                                                    value="home_delivery" onchange="show_pickup_point(this)"
-                                                                    data-target=".pickup_point_id_admin" checked>
-                                                                <span class="d-flex p-3 aiz-megabox-elem">
-                                                                    <span
-                                                                        class="aiz-rounded-check flex-shrink-0 mt-1"></span>
-                                                                    <span
-                                                                        class="flex-grow-1 pl-3 fw-600">{{ translate('Home Delivery') }}</span>
-                                                                </span>
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <label class="aiz-megabox d-block bg-white mb-0">
-                                                                <input type="radio"
-                                                                    name="shipping_type_{{ \App\User::where('user_type', 'admin')->first()->id }}"
-                                                                    value="pickup_point" onchange="show_pickup_point(this)"
-                                                                    data-target=".pickup_point_id_admin">
-                                                                <span class="d-flex p-3 aiz-megabox-elem">
-                                                                    <span
-                                                                        class="aiz-rounded-check flex-shrink-0 mt-1"></span>
-                                                                    <span
-                                                                        class="flex-grow-1 pl-3 fw-600">{{ translate('Local Pickup') }}</span>
-                                                                </span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mt-4 pickup_point_id_admin d-none">
-                                                        <select class="form-control aiz-selectpicker"
-                                                            name="pickup_point_id_{{ \App\User::where('user_type', 'admin')->first()->id }}"
-                                                            data-live-search="true">
-                                                            <option>{{ translate('Select your nearest pickup point') }}
-                                                            </option>
-                                                            @foreach (\App\PickupPoint::where('pick_up_status', 1)->get() as $key => $pick_up_point)
-                                                                <option value="{{ $pick_up_point->id }}" data-content="<span class='d-block'>
-                                                                                <span class='d-block fs-16 fw-600 mb-2'>{{ $pick_up_point->getTranslation('name') }}</span>
-                                                                                <span class='d-block opacity-50 fs-12'><i class='las la-map-marker'></i> {{ $pick_up_point->getTranslation('address') }}</span>
-                                                                                <span class='d-block opacity-50 fs-12'><i class='las la-phone'></i>{{ $pick_up_point->phone }}</span>
-                                                                            </span>">
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="card-footer text-center">
-                                        <input type="hidden" name="owner_id"
-                                            value="{{ App\User::where('user_type', 'admin')->first()->id }}">
-                                        @if (Auth::check())
-                                            <button type="submit"
-                                                class="btn btn-primary fw-600">{{ translate('Continue to Payment') }}</button>
-                                        @else
-                                            <button class="btn btn-primary fw-600"
-                                                onclick="showCheckoutModal()">{{ translate('Continue to Payment') }}</button>
-                                        @endif
-                                    </div>
-                                </div>
-                            @endif
-                            @if (!empty($seller_products))
-                                @foreach ($seller_products as $key => $seller_product)
-                                    <div class="card mb-3 shadow-sm border-0 rounded">
-                                        <div class="card-header p-3">
-                                            <h5 class="fs-16 fw-600 mb-0">
-                                                {{ \App\Shop::where('user_id', $key)->first()->name }}
-                                                {{ translate('Products') }}</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <ul class="list-group list-group-flush">
-                                                @foreach ($seller_product as $cartItem)
-                                                    @php
-                                                        $product = \App\Product::find($cartItem);
-                                                    @endphp
-                                                    <li class="list-group-item">
-                                                        <div class="d-flex">
-                                                            <span class="mr-2">
-                                                                <img src="{{ uploaded_asset($product->thumbnail_img) }}"
-                                                                    class="img-fit size-60px rounded"
-                                                                    alt="{{ $product->getTranslation('name') }}">
-                                                            </span>
-                                                            <span
-                                                                class="fs-14 opacity-60">{{ $product->getTranslation('name') }}</span>
-                                                        </div>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                            @if (\App\BusinessSetting::where('type', 'pickup_point')->first()->value == 1)
-                                                <div class="row border-top pt-3">
-                                                    <div class="col-md-6">
-                                                        <h6 class="fs-15 fw-600">{{ translate('Choose Delivery Type') }}
-                                                        </h6>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="row gutters-5">
-                                                            <div class="col-6">
-                                                                <label class="aiz-megabox d-block bg-white mb-0">
-                                                                    <input type="radio"
-                                                                        name="shipping_type_{{ $key }}"
-                                                                        value="home_delivery"
-                                                                        onchange="show_pickup_point(this)"
-                                                                        data-target=".pickup_point_id_{{ $key }}"
-                                                                        checked>
-                                                                    <span class="d-flex p-3 aiz-megabox-elem">
-                                                                        <span
-                                                                            class="aiz-rounded-check flex-shrink-0 mt-1"></span>
-                                                                        <span
-                                                                            class="flex-grow-1 pl-3 fw-600">{{ translate('Home Delivery') }}</span>
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                                            @if (is_array(json_decode(\App\Shop::where('user_id',
-                                                            $key)->first()->pick_up_point_id)))
-                                                            <div class="col-6">
-                                                                <label class="aiz-megabox d-block bg-white mb-0">
-                                                                    <input type="radio"
-                                                                        name="shipping_type_{{ $key }}"
-                                                                        value="pickup_point"
-                                                                        onchange="show_pickup_point(this)"
-                                                                        data-target=".pickup_point_id_{{ $key }}">
-                                                                    <span class="d-flex p-3 aiz-megabox-elem">
-                                                                        <span
-                                                                            class="aiz-rounded-check flex-shrink-0 mt-1"></span>
-                                                                        <span
-                                                                            class="flex-grow-1 pl-3 fw-600">{{ translate('Local Pickup') }}</span>
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                            @endif
-                                        </div>
-                                        @if (\App\BusinessSetting::where('type', 'pickup_point')->first()->value == 1)
-                                            @if (is_array(json_decode(\App\Shop::where('user_id',
-                                            $key)->first()->pick_up_point_id)))
-                                            <div class="mt-4 pickup_point_id_{{ $key }} d-none">
-                                                <select class="form-control aiz-selectpicker"
-                                                    name="pickup_point_id_{{ $key }}" data-live-search="true">
-                                                    <option>{{ translate('Select your nearest pickup point') }}</option>
-                                                    @foreach (json_decode(\App\Shop::where('user_id', $key)->first()->pick_up_point_id) as $pick_up_point)
-                                                        @if (\App\PickupPoint::find($pick_up_point) != null)
-                                                            <option
-                                                                value="{{ \App\PickupPoint::find($pick_up_point)->id }}"
-                                                                data-content="<span class='d-block'>
-                                                                                                <span class='d-block fs-16 fw-600 mb-2'>{{ \App\PickupPoint::find($pick_up_point)->getTranslation('name') }}</span>
-                                                                                                <span class='d-block opacity-50 fs-12'><i class='las la-map-marker'></i> {{ \App\PickupPoint::find($pick_up_point)->getTranslation('address') }}</span>
-                                                                                                <span class='d-block opacity-50 fs-12'><i class='las la-phone'></i> {{ \App\PickupPoint::find($pick_up_point)->phone }}</span>
-                                                                                            </span>">
-                                                            </option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        @endif
-                                @endif
+                    <input type="hidden" name="owner_id"
+                           value="{{ App\User::where('user_type', 'admin')->first()->id }}">
+                    @if (Auth::check())
+
+                        @if($total < 100)
+                            <button type="reset" class="btn btn-primary fw-600" onclick="showWarning()">{{ $total }}</button>
+                        @else
+                            <button type="submit" class="btn btn-primary fw-600">{{ translate('Continue to Payment hrer') }}</button>
+                        @endif
+                    @else
+                        <button class="btn btn-primary fw-600" onclick="showCheckoutModal()">{{ translate('Continue to Payment') }}</button>
+                    @endif
+            </div>
+                    </div>
+                </form>
+            @else
+                <div class="row">
+                    <div class="col-xl-10 mx-auto">
+                        <div class="shadow-sm bg-white p-4 rounded">
+                            <div class="text-center p-3">
+                                <i class="las la-frown la-3x opacity-60 mb-3"></i>
+                                <h3 class="h4 fw-700">{{ translate('Your Cart is empty') }}</h3>
+                            </div>
                         </div>
                     </div>
-            @endif
-        </div>
-        <div class="card-footer text-center">
-            <input type="hidden" name="owner_id" value="{{ $key }}">
-            @if (Auth::check())
-                <button type="submit" class="btn btn-primary fw-600">{{ translate('Continue to Payment') }}</button>
-            @else
-                <button class="btn btn-primary fw-600"
-                    onclick="showCheckoutModal()">{{ translate('Continue to Payment') }}</button>
-            @endif
-        </div>
-        </div>
-        @endforeach
-        @endif
-        </div>
-        </form>
-    @else
-        <div class="row">
-            <div class="col-xl-10 mx-auto">
-                <div class="shadow-sm bg-white p-4 rounded">
-                    <div class="text-center p-3">
-                        <i class="las la-frown la-3x opacity-60 mb-3"></i>
-                        <h3 class="h4 fw-700">{{ translate('Your Cart is empty') }}</h3>
-                    </div>
                 </div>
-            </div>
-        </div>
-        @endif
+            @endif
         </div>
     </section>
 
@@ -743,6 +530,9 @@
 
         function showCheckoutModal() {
             $('#GuestCheckout').modal();
+        }
+        function showWarning(){
+            AIZ.plugins.notify('warning', 'You Need To Bye At-Last 100 Tk');
         }
     </script>
     <script type="text/javascript">

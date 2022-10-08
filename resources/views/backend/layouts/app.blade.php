@@ -21,11 +21,12 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">
 
 	<!-- aiz core css -->
-	<link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
     @if(\App\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
     <link rel="stylesheet" href="{{ static_asset('assets/css/bootstrap-rtl.min.css') }}">
     @endif
 	<link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
 
     <style>
         body {
@@ -77,7 +78,7 @@
 
 	<script src="{{ static_asset('assets/js/vendors.js') }}" ></script>
 	<script src="{{ static_asset('assets/js/aiz-core.js') }}" ></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     @yield('script')
 
 	<script type="text/javascript">
@@ -87,26 +88,26 @@
 			var m = date.getMinutes(); // 0 - 59
 			var s = date.getSeconds(); // 0 - 59
 			var session = "AM";
-			
+
 			if(h == 0){
 				h = 12;
 			}
-			
+
 			if(h > 12){
 				h = h - 12;
 				session = "PM";
 			}
-			
+
 			h = (h < 10) ? "0" + h : h;
 			m = (m < 10) ? "0" + m : m;
 			s = (s < 10) ? "0" + s : s;
-			
+
 			var time = h + ":" + m + ":" + s + " " + session;
 			document.getElementById("MyClockDisplay").innerText = time;
 			document.getElementById("MyClockDisplay").textContent = time;
-			
+
 			setTimeout(showTime, 1000);
-			
+
 		}
 
 		showTime();

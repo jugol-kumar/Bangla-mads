@@ -17,13 +17,11 @@
                         @endphp
                         @foreach (Session::get('cart') as $key => $cartItem)
                             @php
-                            $product = \App\Product::find($cartItem['id']);
-                            $total = $total + $cartItem['price']*$cartItem['quantity'];
-                            $product_name_with_choice = $product->getTranslation('name');
-                            if ($cartItem['variant'] != null) {
-                                $product_name_with_choice = $product->getTranslation('name').' - '.$cartItem['variant'];
-                            }
+                                $product = \App\Models\Medicine::find($cartItem['id']);
+                                $total = $total + $cartItem['price']*$cartItem['quantity'];
+                                $product_name_with_choice = $product->name;
                             @endphp
+
                             <li class="list-group-item px-0 px-lg-3">
                                 <div class="row gutters-5">
                                     <div class="col-lg-5 d-flex">
@@ -31,7 +29,7 @@
                                             <img
                                                 src="{{ uploaded_asset($product->thumbnail_img) }}"
                                                 class="img-fit size-60px rounded"
-                                                alt="{{  $product->getTranslation('name')  }}"
+                                                alt="{{  $product->name  }}"
                                             >
                                         </span>
                                         <span class="fs-14 opacity-60">{{ $product_name_with_choice }}</span>

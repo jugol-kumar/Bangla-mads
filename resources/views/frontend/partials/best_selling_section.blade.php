@@ -1,29 +1,31 @@
 @if (\App\BusinessSetting::where('type', 'best_selling')->first()->value == 1)
     <section class="mb-4">
         <div class="container">
-            <div class="px-2 py-4 px-md-4 py-md-3 bg-white shadow-sm rounded">
-                <div class="d-flex mb-3 align-items-baseline justify-content-center border-bottom border-main border-width-3">
-                    <span class="conte pb-3 d-inline-block best_selling_title fw-500 text-main mb-4">{{ translate('Best Selling') }}</span>
+            <div class="px-2 py-4 px-md-4 py-md-3 rounded">
+                <div class="d-flex mb-3 align-items-baseline justify-content-center">
+                    <span class="conte pb-3 d-inline-block best_selling_title fw-500 text-main mb-4">{{ translate('Best Selling Option Here') }}</span>
                 </div>
                 <div class="aiz-carousel gutters-10 half-outside-arrow mt-5"
-                     data-items="4"
+                     data-items="6"
                      data-xl-items="5"
-                     data-lg-items="4"
+                     data-lg-items="6"
                      data-md-items="3"
                      data-sm-items="2"
                      data-xs-items="2"
                      data-arrows='true'
-                     data-infinite='true'>
-                    @foreach (filter_products(\App\Product::where('published', 1)->orderBy('num_of_sale', 'desc'))->limit(12)->get() as $key => $product)
+                     data-infinite='true'
+                     data-autoplay="false"
+                    >
+                    @foreach ((\App\Models\Medicine::limit(12)->get()) as $key => $product)
                         <div class="carousel-box">
-                            <div class="aiz-card-box border-main-1 rounded border-radius-5">
+                            <div class="aiz-card-box rounded medicin_card">
                                 <div class="position-relative">
-                                    <a href="{{ route('product', $product->slug) }}" class="d-block">
+                                    <a href="{{ route('product', $product->name) }}" class="d-block">
                                         <img
-                                            class="img-fit lazyload mx-auto h-140px h-md-210px px-10px pt-10px"
+                                            class="img-fit lazyload mx-auto h-140px h-md-210px p-2"
                                             src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                            data-src="{{ uploaded_asset($product->thumbnail_img) }}"
-                                            alt="{{  $product->getTranslation('name')  }}"
+                                            data-src="{{ uploaded_asset($product->category->icon) }}"
+                                            alt="{{  $product->name  }}"
                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
                                         >
                                     </a>
@@ -41,22 +43,8 @@
                                 </div>
                                 <div class="py-md-3 p-1 py-2 p-md-1 text-center">
                                     <h3 class="fw-600 fs-15 text-truncate-2 lh-1-4 mb-0 h-35px">
-                                        <a href="{{ route('product', $product->slug) }}" class="d-block text-reset">{{  Str::limit($product->getTranslation('name'), 18)  }}</a>
+                                        <a href="{{ route('product', $product->name) }}" class="d-block text-reset">{{  Str::limit($product->name, 18)  }}</a>
                                     </h3>
-
-                                    <div class="fs-16 mx-5 d-flex align-items-center justify-content-center">
-                                        @if(home_base_price($product->id) != home_discounted_base_price($product->id))
-                                            <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
-                                        @endif
-                                        <span class="fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>
-                                    </div>
-
-                                    @if (\App\Addon::where('unique_identifier', 'club_point')->first() != null && \App\Addon::where('unique_identifier', 'club_point')->first()->activated)
-                                        <div class="rounded px-2 mt-2 bg-soft-primary border-soft-primary border">
-                                            {{ translate('Club Point') }}:
-                                            <span class="fw-700 float-right">{{ $product->earn_point }}</span>
-                                        </div>
-                                    @endif
                                 </div>
                             </div>
                         </div>

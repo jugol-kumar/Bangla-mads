@@ -24,20 +24,17 @@
                                     @endphp
                                     @foreach (Session::get('cart') as $key => $cartItem)
                                         @php
-                                            $product = \App\Product::find($cartItem['id']);
+                                            $product = \App\Models\Medicine::find($cartItem['id']);
                                             $total = $total + $cartItem['price'] * $cartItem['quantity'];
-                                            $product_name_with_choice = $product->getTranslation('name');
-                                            if ($cartItem['variant'] != null) {
-                                                $product_name_with_choice = $product->getTranslation('name') . ' - ' . $cartItem['variant'];
-                                            }
+                                            $product_name_with_choice = $product->name;
                                         @endphp
                                         <li class="list-group-item px-0 px-lg-3">
                                             <div class="row gutters-5">
                                                 <div class="col-lg-5 d-flex">
                                                     <span class="mr-2 ml-0">
-                                                        <img src="{{ uploaded_asset($product->thumbnail_img) }}"
+                                                        <img src="{{ uploaded_asset($product->category->icon) }}"
                                                             class="img-fit size-60px rounded"
-                                                            alt="{{ $product->getTranslation('name') }}">
+                                                            alt="{{ $product->name}}">
                                                     </span>
                                                     <span class="fs-14 opacity-60">{{ $product_name_with_choice }}</span>
                                                 </div>
@@ -46,44 +43,42 @@
                                                     <span
                                                         class="opacity-60 fs-12 d-block d-lg-none">{{ translate('Price') }}</span>
                                                     <span
-                                                        class="fw-600 fs-16">{{ single_price($cartItem['price']) }}</span>
+                                                        class="fw-600 fs-16">{{ $cartItem['price'] }}</span>
                                                 </div>
                                                 <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
                                                     <span
                                                         class="opacity-60 fs-12 d-block d-lg-none">{{ translate('Tax') }}</span>
                                                     <span
-                                                        class="fw-600 fs-16">{{ single_price($cartItem['tax']) }}</span>
+                                                        class="fw-600 fs-16">{{ $cartItem['tax']}}</span>
                                                 </div>
 
                                                 <div class="col-lg col-6 order-4 order-lg-0">
-                                                    @if ($cartItem['digital'] != 1)
-                                                        <div
-                                                            class="row no-gutters align-items-center aiz-plus-minus mr-2 ml-0">
-                                                            <button
-                                                                class="btn col-auto btn-icon btn-sm btn-circle btn-light"
-                                                                type="button" data-type="minus"
-                                                                data-field="quantity[{{ $key }}]">
-                                                                <i class="las la-minus"></i>
-                                                            </button>
-                                                            <input type="text" name="quantity[{{ $key }}]"
-                                                                class="col border-0 text-center flex-grow-1 fs-16 input-number"
-                                                                placeholder="1" value="{{ $cartItem['quantity'] }}"
-                                                                min="1" max="10" readonly
-                                                                onchange="updateQuantity({{ $key }}, this)">
-                                                            <button
-                                                                class="btn col-auto btn-icon btn-sm btn-circle btn-light"
-                                                                type="button" data-type="plus"
-                                                                data-field="quantity[{{ $key }}]">
-                                                                <i class="las la-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                    @endif
+                                                    <div
+                                                        class="row no-gutters align-items-center aiz-plus-minus mr-2 ml-0">
+                                                        <button
+                                                            class="btn col-auto btn-icon btn-sm btn-circle btn-light"
+                                                            type="button" data-type="minus"
+                                                            data-field="quantity[{{ $key }}]">
+                                                            <i class="las la-minus"></i>
+                                                        </button>
+                                                        <input type="text" name="quantity[{{ $key }}]"
+                                                            class="col border-0 text-center flex-grow-1 fs-16 input-number"
+                                                            placeholder="1" value="{{ $cartItem['quantity'] }}"
+                                                            min="1" max="10" readonly
+                                                            onchange="updateQuantity({{ $key }}, this)">
+                                                        <button
+                                                            class="btn col-auto btn-icon btn-sm btn-circle btn-light"
+                                                            type="button" data-type="plus"
+                                                            data-field="quantity[{{ $key }}]">
+                                                            <i class="las la-plus"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                                 <div class="col-lg col-4 order-3 order-lg-0 my-3 my-lg-0">
                                                     <span
                                                         class="opacity-60 fs-12 d-block d-lg-none">{{ translate('Total') }}</span>
                                                     <span
-                                                        class="fw-600 fs-16 text-primary">{{ single_price(($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity']) }}</span>
+                                                        class="fw-600 fs-16 text-primary">{{ (($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity']) }}</span>
                                                 </div>
                                                 <div class="col-lg-auto col-6 order-5 order-lg-0 text-right">
                                                     <a href="javascript:void(0)"
@@ -198,16 +193,9 @@
                                 $admin_products = [];
                                 $seller_products = [];
                                 foreach (Session::get('cart') as $key => $cartItem) {
-                                    if (\App\Product::find($cartItem['id'])->added_by == 'admin') {
-                                        array_push($admin_products, $cartItem['id']);
-                                    } else {
-                                        $product_ids = [];
-                                        if (array_key_exists(\App\Product::find($cartItem['id'])->user_id, $seller_products)) {
-                                            $product_ids = $seller_products[\App\Product::find($cartItem['id'])->user_id];
-                                        }
-                                        array_push($product_ids, $cartItem['id']);
-                                        $seller_products[\App\Product::find($cartItem['id'])->user_id] = $product_ids;
-                                    }
+                                    $product_ids = [];
+                                    array_push($product_ids, $cartItem['id']);
+                                    $seller_products[ \App\Models\Medicine::find($cartItem['id'])->user_id] = $product_ids;
                                 }
                             @endphp
 
@@ -221,17 +209,17 @@
                                         <ul class="list-group list-group-flush">
                                             @foreach ($admin_products as $key => $cartItem)
                                                 @php
-                                                    $product = \App\Product::find($cartItem);
+                                                    $product = \App\Models\Medicine::find($cartItem);
                                                 @endphp
                                                 <li class="list-group-item">
                                                     <div class="d-flex">
                                                         <span class="mr-2">
-                                                            <img src="{{ uploaded_asset($product->thumbnail_img) }}"
+                                                            <img src="{{ uploaded_asset($product->category->icon) }}"
                                                                 class="img-fit size-60px rounded"
-                                                                alt="{{ $product->getTranslation('name') }}">
+                                                                alt="{{ $product->name }}">
                                                         </span>
                                                         <span
-                                                            class="fs-14 opacity-60">{{ $product->getTranslation('name') }}</span>
+                                                            class="fs-14 opacity-60">{{ $product->name }}</span>
                                                     </div>
                                                 </li>
                                             @endforeach
@@ -304,122 +292,15 @@
                                     </div>
                                 </div>
                             @endif
-                            @if (!empty($seller_products))
-                                @foreach ($seller_products as $key => $seller_product)
-                                    <div class="card mb-3 shadow-sm border-0 rounded">
-                                        <div class="card-header p-3">
-                                            <h5 class="fs-16 fw-600 mb-0">
-                                                {{ \App\Shop::where('user_id', $key)->first()->name }}
-                                                {{ translate('Products') }}</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <ul class="list-group list-group-flush">
-                                                @foreach ($seller_product as $cartItem)
-                                                    @php
-                                                        $product = \App\Product::find($cartItem);
-                                                    @endphp
-                                                    <li class="list-group-item">
-                                                        <div class="d-flex">
-                                                            <span class="mr-2">
-                                                                <img src="{{ uploaded_asset($product->thumbnail_img) }}"
-                                                                    class="img-fit size-60px rounded"
-                                                                    alt="{{ $product->getTranslation('name') }}">
-                                                            </span>
-                                                            <span
-                                                                class="fs-14 opacity-60">{{ $product->getTranslation('name') }}</span>
-                                                        </div>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                            @if (\App\BusinessSetting::where('type', 'pickup_point')->first()->value == 1)
-                                                <div class="row border-top pt-3">
-                                                    <div class="col-md-6">
-                                                        <h6 class="fs-15 fw-600">{{ translate('Choose Delivery Type') }}
-                                                        </h6>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="row gutters-5">
-                                                            <div class="col-6">
-                                                                <label class="aiz-megabox d-block bg-white mb-0">
-                                                                    <input type="radio"
-                                                                        name="shipping_type_{{ $key }}"
-                                                                        value="home_delivery"
-                                                                        onchange="show_pickup_point(this)"
-                                                                        data-target=".pickup_point_id_{{ $key }}"
-                                                                        checked>
-                                                                    <span class="d-flex p-3 aiz-megabox-elem">
-                                                                        <span
-                                                                            class="aiz-rounded-check flex-shrink-0 mt-1"></span>
-                                                                        <span
-                                                                            class="flex-grow-1 pl-3 fw-600">{{ translate('Home Delivery') }}</span>
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                                            @if (is_array(json_decode(\App\Shop::where('user_id',
-                                                            $key)->first()->pick_up_point_id)))
-                                                            <div class="col-6">
-                                                                <label class="aiz-megabox d-block bg-white mb-0">
-                                                                    <input type="radio"
-                                                                        name="shipping_type_{{ $key }}"
-                                                                        value="pickup_point"
-                                                                        onchange="show_pickup_point(this)"
-                                                                        data-target=".pickup_point_id_{{ $key }}">
-                                                                    <span class="d-flex p-3 aiz-megabox-elem">
-                                                                        <span
-                                                                            class="aiz-rounded-check flex-shrink-0 mt-1"></span>
-                                                                        <span
-                                                                            class="flex-grow-1 pl-3 fw-600">{{ translate('Local Pickup') }}</span>
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                                            @endif
-                                                        </div>
-                                                        @if (\App\BusinessSetting::where('type', 'pickup_point')->first()->value == 1)
-                                                            @if (is_array(json_decode(\App\Shop::where('user_id',
-                                                            $key)->first()->pick_up_point_id)))
-                                                            <div class="mt-4 pickup_point_id_{{ $key }} d-none">
-                                                                <select class="form-control aiz-selectpicker"
-                                                                    name="pickup_point_id_{{ $key }}" data-live-search="true">
-                                                                    <option>{{ translate('Select your nearest pickup point') }}</option>
-                                                                    @foreach (json_decode(\App\Shop::where('user_id', $key)->first()->pick_up_point_id) as $pick_up_point)
-                                                                        @if (\App\PickupPoint::find($pick_up_point) != null)
-                                                                            <option
-                                                                                value="{{ \App\PickupPoint::find($pick_up_point)->id }}"
-                                                                                data-content="<span class='d-block'>
-                                                                                                                    <span class='d-block fs-16 fw-600 mb-2'>{{ \App\PickupPoint::find($pick_up_point)->getTranslation('name') }}</span>
-                                                                                                                    <span class='d-block opacity-50 fs-12'><i class='las la-map-marker'></i> {{ \App\PickupPoint::find($pick_up_point)->getTranslation('address') }}</span>
-                                                                                                                    <span class='d-block opacity-50 fs-12'><i class='las la-phone'></i> {{ \App\PickupPoint::find($pick_up_point)->phone }}</span>
-                                                                                                                </span>">
-                                                                            </option>
-                                                                        @endif
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            @endif
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div class="card-footer text-center">
-                                            <input type="hidden" name="owner_id" value="{{ $key }}">
-                                            @if (Auth::check())
-                                                <button type="submit" class="btn btn-primary fw-600">{{ translate('Continue To Orders') }}</button>
-                                            @else
-                                                <button class="btn btn-primary fw-600" type="button" onclick="showCheckoutModal()">{{ translate('Continue To Orders') }}</button>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endforeach
-                            @endif
+
                         </div>
                 </form>
             @else
                 <div class="row">
                     <div class="col-xl-10 mx-auto">
-                        <div class="shadow-sm bg-white p-4 rounded">
+                        <div class="bg-transparent p-4 rounded">
                             <div class="text-center p-3">
-                                <i class="las la-frown la-3x opacity-60 mb-3"></i>
+                                <img src="{{ static_asset('assets/img/no_data.gif') }}" class="w-100 h-100"/>
                                 <h3 class="h4 fw-700">{{ translate('Your Cart is empty') }}</h3>
                             </div>
                         </div>

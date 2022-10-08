@@ -85,6 +85,15 @@
         .modal.website-popup {
             display: block;
         }
+        #preeloader{
+            backdrop-filter: blur(10px);
+            width:100%;
+            height:100vh;
+            position:fixed;
+            z-index:10000;
+            {{--            background:url({{ asset("frontend/images/load.gif") }}) no-repeat center center;--}}
+            background:url({{ static_asset("assets/img/loading.svg") }}) no-repeat center center;
+        }
 
     </style>
 
@@ -141,61 +150,110 @@
 </head>
 
 <body>
+
+<div style="background-color: inherit;" id="preeloader" class="d-flex align-items-center justify-content-center"></div>
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0"
         nonce="BQpuMo5G"></script>
+
+    <a class="bg-main" id="backToTop">
+        <i class="la la-angle-up"></i>
+    </a>
+
     <!-- aiz-main-wrapper -->
 
     <div class="aiz-main-wrapper d-flex flex-column bg-white">
-
-
-        {{-- start customization --}}
-
-        <div class="top-header d-flex flex-row">
-            <div class="leftside">
-                <div class="leftinside">
-                    <a class="link float-md-center text-md-center" href="tell: (+88) 09638 120 130">Call: (+88) 09638 120 130</a>
-                    <a class="link float-md-center text-md-center" href="fb.com" target="_blank" class="facebook"><i class="lab la-facebook-square"></i></a>
-                    <a class="link float-md-center text-md-center" href="instagram.com" target="_blank"><i class="lab la-instagram"></i></a>
-                </div>
-            </div>
-
-            <div class="middle float-md-center">
-                <a class="link"
-                    href="https://play.google.com/store/apps/details?id=com.banglameds.banglameds">Download App</a>
-                <a class="link" href="https://play.google.com/store/apps/details?id=com.banglameds.banglameds"
-                    target="_blank"><i class="lab la-android"></i></a>
-            </div>
-
-            <div class="right float-md-end">
-                <a class="link" href="http://">How to order</a>
-                <a class="link" href="instagram.com" target="_blank"><i class="lab la-file-text"></i></a>
-            </div>
-
-        </div>
-        {{-- end customization --}}
-
-        @php
-            $topbar_banner = get_setting('topbar_banner');
-        @endphp
-        @if ($topbar_banner != null)
-            <div class="position-relative top-banner removable-session z-1035" data-key="top-banner"
-                data-value="removed">
-                <a href="{{ get_setting('topbar_banner_link') }}" class="d-block text-reset">
-                    <img src="{{ uploaded_asset($topbar_banner) }}" class="w-100 mw-100 h-100px h-lg-auto img-fit">
-                </a>
-                <button class="btn text-white absolute-top-right set-session" data-key="top-banner" data-value="removed"
-                    data-toggle="remove-parent" data-parent=".top-banner">
-                    <i class="la la-close la-2x"></i>
-                </button>
-            </div>
-        @endif
-        <!-- Header -->
         @include('frontend.inc.nav')
-        @include('frontend.inc.sidebar_cart')
-        @yield('content')
 
-        @include('frontend.inc.footer')
+        @include('frontend.inc.sidebar_cart')
+        <div class="d-flex">
+            <div class="left-sidebar ">
+                <nav class="navbar" id="sidebar">
+{{--
+
+                    <li class="nav-item active">
+                        <a href="#homeSubmenu"
+                           data-toggle="collapse"
+                           aria-expanded="false"
+                           class="dropdown-toggle nav-link d-flex align-items-center">
+                            <img class="mr-3 category-icon" src="{{ static_asset('assets/img/avater.png') }}" />
+                            <span>Home</span>
+                        </a>
+
+                        <ul class="collapse list-unstyled" id="homeSubmenu">
+                            <li class="nav-item">
+                                <i class="las la-dot-circle"></i>
+                                <a href="#">Home 1</a>
+                            </li>
+                            <li class="nav-item">
+                                <i class="las la-dot-circle"></i>
+                                <a href="#">Home 2</a>
+                            </li>
+                            <li class="nav-item">
+                                <i class="las la-dot-circle"></i>
+                                <a href="#">Home 3</a>
+                            </li>
+                        </ul>
+                    </li>
+--}}
+
+                    <ul class="navbar-nav list-unstyled components">
+
+                        <li class="upload-res">
+                            <a href="#">
+                                <i class="la la-upload"></i>
+                                Upload Prescriptions
+                            </a>
+                        </li>
+
+                        @foreach (\App\Category::where('level', 0)->get()->take(11) as $key => $category)
+                            @if(count(\App\Utility\CategoryUtility::get_immediate_children_ids($category->id)) > 0)
+                                <li class="nav-item">
+                                    <a href="#{{$category->slug}}"
+                                       data-toggle="collapse"
+                                       aria-expanded="false"
+                                       class="text-black dropdown-toggle nav-link d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img class="mr-3 category-icon lazyload"
+                                                 src="{{ static_asset('frontend/images/placeholder.jpg') }}"
+                                                 data-src="{{ uploaded_asset($category->icon) }}"
+                                                 alt="{{ translate('All Category') }}">
+                                            <span>{{ $category->name }}</span>
+                                        </div>
+
+                                        <i class="la la-angle-down"></i>
+                                    </a>
+                                    <ul class="collapse list-unstyled" id="{{ $category->slug }}">
+                                        @foreach (\App\Utility\CategoryUtility::get_immediate_children_ids($category->id) as $key => $first_level_id)
+                                            <li class="nav-item">
+                                                <i class="las la-caret-right"></i>
+                                                <a class="text-black" href="{{ route("category.details",  \App\Category::find($first_level_id)->slug) }}">{{ \App\Category::find($first_level_id)->name }}</a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            @else
+                                <li class="nav-item">
+                                    <a href="{{ route("category.details", $category->slug) }}"
+                                       class="text-black nav-link d-flex align-items-center">
+                                        <img class="mr-3 category-icon lazyload"
+                                             src="{{ static_asset('frontend/images/placeholder.jpg') }}"
+                                             data-src="{{ uploaded_asset($category->icon) }}"
+                                             alt="{{ translate('All Category') }}">
+                                        <span>{{ $category->name }}</span>
+                                    </a>
+                                </li>
+                            @endif
+                        @endforeach
+                    </ul>
+                </nav>
+            </div>
+            <div class="main-content-style ml-auto">
+                @yield('content')
+
+                @include('frontend.inc.footer')
+            </div>
+        </div>
 
     </div>
 
@@ -290,7 +348,33 @@
         @endforeach
     </script>
 
+
     <script>
+        var btn = $('#backToTop');
+        $(window).scroll(function() {
+            if ($(window).scrollTop() > 300) {
+                btn.addClass('show');
+            } else {
+                btn.removeClass('show');
+            }
+        });
+        btn.on('click', function(e) {
+            e.preventDefault();
+            $('html, body').animate({scrollTop:0}, '300');
+        });
+
+        var preeloader = document.getElementById("preeloader");
+        window.addEventListener('load', function(){
+            preeloader.style.display="none";
+            preeloader.remove();
+        });
+    </script>
+
+
+    <script>
+
+
+
         $(document).ready(function() {
             $('.category-nav-element').each(function(i, el) {
                 $(el).on('mouseover', function() {
@@ -382,6 +466,7 @@
                 _token: AIZ.data.csrf
             }, function(data) {
                 $('#cart_items').html(data);
+                window.location.reload();
             });
         }
 
@@ -442,12 +527,12 @@
                 AIZ.plugins.slickCarousel();
                 AIZ.plugins.zoom();
                 AIZ.extra.plusMinus();
-                getVariantPrice();
+                // getVariantPrice();
             });
         }
 
         $('#option-choice-form input').on('change', function() {
-            getVariantPrice();
+            // getVariantPrice();
         });
 
         function getVariantPrice() {
@@ -468,7 +553,9 @@
                         $('#option-choice-form #chosen_price_div').removeClass('d-none');
                         $('#option-choice-form #chosen_price_div #chosen_price').html(data.price);
                         $('#available-quantity').html(data.quantity);
+
                         $('.input-number').prop('max', data.quantity);
+
                         if (parseInt(data.quantity) < 1 && data.digital == 0) {
                             $('.buy-now').hide();
                             $('.add-to-cart').hide();

@@ -6,7 +6,7 @@
         <img src="{{ static_asset('assets/img/placeholder.jpg') }}" data-src="{{ uploaded_asset($product->thumbnail_img) }}" class="mr-3 lazyload size-100px img-fit rounded" alt="Product Image">
         <div class="media-body text-left">
             <h6 class="fw-600">
-                {{  $product->getTranslation('name')  }}
+                {{  $product->name }}
             </h6>
             <div class="row mt-3">
                 <div class="col-sm-3 opacity-60">

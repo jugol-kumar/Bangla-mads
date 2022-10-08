@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Medicine;
 use Illuminate\Http\Request;
 use App\Http\Controllers\OTPVerificationController;
 use App\Http\Controllers\ClubPointController;
@@ -286,10 +287,8 @@ class OrderController extends Controller
         else{
             $order->guest_id = mt_rand(100000, 999999);
         }
-        
         $order->seller_id = Session::get('owner_id');
         $order->shipping_address = json_encode($request->session()->get('shipping_info'));
-        
 
         $order->payment_type = $request->payment_type && $request->payment_type == 'partial' ? 'partial' : $request->payment_option;
         $order->delivery_viewed = '0';
@@ -307,105 +306,60 @@ class OrderController extends Controller
             $seller_products = array();
 
             //Order Details Storing
-            foreach (Session::get('cart')->where('owner_id', Session::get('owner_id')) as $key => $cartItem){
-                $product = Product::find($cartItem['id']);
+            foreach (Session::get('cart') as $key => $cartItem){
 
-                if($product->added_by == 'admin') {
-                    array_push($admin_products, $cartItem['id']);
-                }
-                else {
-                    $product_ids = array();
-                    if(array_key_exists($product->user_id, $seller_products)){
-                        $product_ids = $seller_products[$product->user_id];
-                    }
-                    array_push($product_ids, $cartItem['id']);
-                    $seller_products[$product->user_id] = $product_ids;
-                }
+//
+//                return dd($cartItem);
+//                exit();
 
+                $product = Medicine::find($cartItem['id']);
                 $subtotal += $cartItem['price']*$cartItem['quantity'];
                 $tax += $cartItem['tax']*$cartItem['quantity'];
 
-                $product_variation = $cartItem['variant'];
-
-                if($product_variation != null) {
-                    $product_stock = $product->stocks->where('variant', $product_variation)->first();
-                    if($product->digital != 1 &&  $cartItem['quantity'] > $product_stock->qty) {
-                        flash(translate('The requested quantity is not available for ').$product->getTranslation('name'))->warning();
-                        $order->delete();
-                        return redirect()->route('cart')->send();
-                    }
-                    else {
-                        $product_stock->qty -= $cartItem['quantity'];
-                        $product_stock->save();
-                    }
-                }
-                else {
-                    if ($product->digital != 1 && $cartItem['quantity'] > $product->current_stock) {
-                        flash(translate('The requested quantity is not available for ').$product->getTranslation('name'))->warning();
-                        $order->delete();
-                        return redirect()->route('cart')->send();
-                    }
-                    else {
-                        $product->current_stock -= $cartItem['quantity'];
-                        $product->save();
-//                        $product_stock->qty -= $cartItem['quantity'];
-//                        $product_stock->save();
-                    }
-                }
-
                 $order_detail = new OrderDetail;
-                $order_detail->order_id  =$order->id;
+                $order_detail->order_id  = $order->id;
                 $order_detail->seller_id = $product->user_id;
                 $order_detail->product_id = $product->id;
-                $order_detail->variation = $product_variation;
                 $order_detail->price = $cartItem['price'] * $cartItem['quantity'];
                 $order_detail->tax = $cartItem['tax'] * $cartItem['quantity'];
-                $order_detail->shipping_type = $cartItem['shipping_type'];
+                $order_detail->shipping_type = "home_delivery";
                 $order_detail->product_referral_code = $cartItem['product_referral_code'];
+                $order_detail->delivery_status = 'pending';
 
                 //Dividing Shipping Costs
                 $shipping_info = $request->session()->get('shipping_info');
 
-                if ($cartItem['shipping_type'] == 'home_delivery') {
-                    $order_detail->shipping_cost = getShippingCost($key);
-                    
-                    if (isset($cartItem['shipping']) && is_array(json_decode($cartItem['shipping'], true))) {
-                        foreach (json_decode($cartItem['shipping'], true) as $shipping_region => $val) {
-                            if ($shipping_info['city'] == $shipping_region) {
-                                $order_detail->shipping_cost = (double) ($val);
-                            } else {
-                                $order_detail->shipping_cost = 0;
-                            }
-                        }
-                    } else {
-                        if (!$cartItem['shipping']) {
-                            $order_detail->shipping_cost = 0;
-                        }
-                    }
-                } else {
-                    $order_detail->shipping_cost = 0;
-                }
-                if($product->is_quantity_multiplied == 1 && get_setting('shipping_type') == 'product_wise_shipping') {
-                    $order_detail->shipping_cost = $order_detail->shipping_cost * $cartItem['quantity'];
-                }
+//
+//                if ($cartItem['shipping_type'] == 'home_delivery') {
+//                    $order_detail->shipping_cost = getShippingCost($key);
+//
+//                    if (isset($cartItem['shipping']) && is_array(json_decode($cartItem['shipping'], true))) {
+//                        foreach (json_decode($cartItem['shipping'], true) as $shipping_region => $val) {
+//                            if ($shipping_info['city'] == $shipping_region) {
+//                                $order_detail->shipping_cost = (double) ($val);
+//                            } else {
+//                                $order_detail->shipping_cost = 0;
+//                            }
+//                        }
+//                    } else {
+//                        if (!$cartItem['shipping']) {
+//                            $order_detail->shipping_cost = 0;
+//                        }
+//                    }
+//                } else {
+//                    $order_detail->shipping_cost = 0;
+//                }
+
                 $shipping += $order_detail->shipping_cost;
 
-                if ($cartItem['shipping_type'] == 'pickup_point') {
-                    $order_detail->pickup_point_id = $cartItem['pickup_point'];
-                }
                 //End of storing shipping cost
-
                 $order_detail->quantity = $cartItem['quantity'];
                 $order_detail->save();
 
-                $product->num_of_sale++;
-                $product->save();
-                
-                if (\App\Addon::where('unique_identifier', 'affiliate_system')->first() != null && 
+                if (\App\Addon::where('unique_identifier', 'affiliate_system')->first() != null &&
                         \App\Addon::where('unique_identifier', 'affiliate_system')->first()->activated) {
                     if($order_detail->product_referral_code) {
                         $referred_by_user = User::where('referral_code', $order_detail->product_referral_code)->first();
-
                         $affiliateController = new AffiliateController;
                         $affiliateController->processAffiliateStats($referred_by_user->id, 0, $order_detail->quantity, 0, 0);
                     }
@@ -413,24 +367,6 @@ class OrderController extends Controller
             }
 
             $order->grand_total = $subtotal + $tax + $shipping;
-
-            if(Session::has('club_point')){
-                $order->grand_total -= Session::get('club_point');
-                $clubpointController = new ClubPointController;
-                $clubpointController->deductClubPoints($order->user_id, Session::get('club_point'));
-
-                $order->club_point = Session::get('club_point');
-            }
-
-            if(Session::has('coupon_discount')){
-                $order->grand_total -= Session::get('coupon_discount');
-                $order->coupon_discount = Session::get('coupon_discount');
-
-                $coupon_usage = new CouponUsage;
-                $coupon_usage->user_id = Auth::user()->id;
-                $coupon_usage->coupon_id = Session::get('coupon_id');
-                $coupon_usage->save();
-            }
 
             $order->save();
 
@@ -555,7 +491,7 @@ class OrderController extends Controller
         $order->delivery_viewed = '0';
         $order->delivery_status = $request->status;
         $order->save();
-        
+
         if(Auth::user()->user_type == 'seller') {
             foreach($order->orderDetails->where('seller_id', Auth::user()->id) as $key => $orderDetail){
                 $orderDetail->delivery_status = $request->status;
@@ -602,17 +538,17 @@ class OrderController extends Controller
                 if (\App\Addon::where('unique_identifier', 'affiliate_system')->first() != null && \App\Addon::where('unique_identifier', 'affiliate_system')->first()->activated) {
                     if (($request->status == 'delivered' || $request->status == 'cancelled') &&
                             $orderDetail->product_referral_code) {
-                        
+
                         $no_of_delivered = 0;
                         $no_of_canceled = 0;
-                        
+
                         if($request->status == 'delivered') {
                             $no_of_delivered = $orderDetail->quantity;
                         }
                         if($request->status == 'cancelled') {
                             $no_of_canceled = $orderDetail->quantity;
                         }
-                        
+
                         $referred_by_user = User::where('referral_code', $orderDetail->product_referral_code)->first();
 
                         $affiliateController = new AffiliateController;
@@ -681,7 +617,7 @@ class OrderController extends Controller
                             $commission_percentage = $orderDetail->product->category->commision_rate;
                         }
                         if($orderDetail->product->user->user_type == 'seller'){
-                            
+
                             $admin_commission = ($orderDetail->price * $commission_percentage)/100;
 
                             if (get_setting('product_manage_by_admin') == 1) {
@@ -721,7 +657,7 @@ class OrderController extends Controller
                             $commission_percentage = $orderDetail->product->category->commision_rate;
                         }
                         if($orderDetail->product->user->user_type == 'seller'){
-                            
+
                             $admin_commission = ($orderDetail->price * $commission_percentage)/100;
 
                             if (get_setting('product_manage_by_admin') == 1) {

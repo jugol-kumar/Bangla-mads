@@ -39,10 +39,10 @@
                 @endphp
                 @foreach (Session::get('cart')->where('owner_id', Session::get('owner_id')) as $key => $cartItem)
                     @php
-                        $product = \App\Product::find($cartItem['id']);
+                        $product = \App\Models\Medicine::find($cartItem['id']);
                         $subtotal += $cartItem['price']*$cartItem['quantity'];
                         $tax += $cartItem['tax']*$cartItem['quantity'];
-                        
+
                         if(isset($cartItem['shipping']) && is_array(json_decode($cartItem['shipping'], true))) {
                             foreach(json_decode($cartItem['shipping'], true) as $shipping_info => $val) {
                                 if($shipping_region == $shipping_info) {
@@ -52,17 +52,14 @@
                         } else {
                             $product_shipping_cost = (double) $cartItem['shipping'];
                         }
-                        
+
                         if($product->is_quantity_multiplied == 1 && get_setting('shipping_type') == 'product_wise_shipping') {
                             $product_shipping_cost = $product_shipping_cost * $cartItem['quantity'];
                         }
-                        
+
                         $shipping += $product_shipping_cost;
-                        
-                        $product_name_with_choice = $product->getTranslation('name');
-                        if ($cartItem['variant'] != null) {
-                            $product_name_with_choice = $product->getTranslation('name').' - '.$cartItem['variant'];
-                        }
+
+                        $product_name_with_choice = $product->name;
                     @endphp
                     <tr class="cart_item">
                         <td class="product-name">

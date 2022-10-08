@@ -6,6 +6,9 @@
 
 @section('meta_keywords'){{ $detailedProduct->tags }}@stop
 
+
+
+
 @section('meta')
     <!-- Schema.org markup for Google+ -->
     <meta itemprop="name" content="{{ $detailedProduct->meta_title }}">
@@ -25,7 +28,7 @@
     <!-- Open Graph data -->
     <meta property="og:title" content="{{ $detailedProduct->meta_title }}" />
     <meta property="og:type" content="og:product" />
-    <meta property="og:url" content="{{ route('product', $detailedProduct->slug) }}" />
+    <meta property="og:url" content="{{ route('product', ['slug' => $detailedProduct->slug ?? $detailedProduct->name, 'id' => $detailedProduct->id]) }}" />
     <meta property="og:image" content="{{ uploaded_asset($detailedProduct->meta_img) }}" />
     <meta property="og:description" content="{{ $detailedProduct->meta_description }}" />
     <meta property="og:site_name" content="{{ get_setting('meta_title') }}" />
@@ -34,19 +37,17 @@
     <meta property="fb:app_id" content="{{ env('FACEBOOK_PIXEL_ID') }}">
 @endsection
 
+@section('css')
+
+@endsection
+
+
 @section('content')
     <section class="mb-4 pt-3">
         <div class="container">
-            <div class="bg-white rounded p-3">
+            <div class="bg-transparent rounded p-3">
                 <div class="row">
-                    <div class="col-md-3 d-none d-md-block">
-                        @include('frontend.partials.left_category')
-                    </div>
-                    <div class="col-md-9">
-                        <div class="bg-main p-3 fs-19 fw-600 text-white">
-                            {{ $detailedProduct->getTranslation('name') }}
-                        </div>
-
+                    <div class="col-md-12">
                         <div class="row mt-4">
                             <div class="col-xl-5 col-lg-6 mb-4">
                                 <div class="sticky-top z-3 row gutters-10">
@@ -55,24 +56,11 @@
                                     @endphp
                                     <div class="col order-1 order-md-2">
                                         <div class="aiz-carousel product-gallery" data-nav-for='.product-gallery-thumb' data-fade='true' data-auto-height='true'>
-                                            @foreach ($detailedProduct->stocks as $key => $stock)
-                                                @if ($stock->image != null)
-                                                    <div class="carousel-box img-zoom rounded">
-                                                        <img
-                                                            class="img-fluid lazyload"
-                                                            src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                                            data-src="{{ uploaded_asset($stock->image) }}"
-                                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
-                                                        >
-                                                    </div>
-                                                @endif
-                                            @endforeach
-
                                             @foreach ($photos as $key => $photo)
                                                 <div class="carousel-box img-zoom rounded">
                                                     <img
                                                         class="img-fluid lazyload"
-                                                        src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                        src="{{ uploaded_asset($detailedProduct->photo ?? $detailedProduct?->category?->icon) ?? static_asset('assets/img/placeholder.jpg') }}"
                                                         data-src="{{ uploaded_asset($photo) }}"
                                                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
                                                     >
@@ -85,56 +73,33 @@
 
                             <div class="col-xl-7 col-lg-6">
                                 <div class="text-left">
-                                    <h1 class="mb-2 fs-20 fw-600 text-main">
-                                        {{ $detailedProduct->getTranslation('name') }}
+                                    <h1 class="mb-0 text-black">
+                                        {{ $detailedProduct->name}}
                                     </h1>
 
-                                    @php
-                                        $qty = 0;
-                                        if($detailedProduct->variant_product){
-                                            foreach ($detailedProduct->stocks as $key => $stock) {
-                                                $qty += $stock->qty;
-                                            }
-                                        }
-                                        else{
-                                            $qty = $detailedProduct->current_stock;
-                                        }
-                                    @endphp
+                                    <h5 class="text-black-50">{{ $detailedProduct->type }}</h5>
 
-                                    @if(home_price($detailedProduct->id) != home_discounted_price($detailedProduct->id))
-                                        <div class="row no-gutters d-flex align-items-baseline py-2">
-                                            <del class="h5 fw-600">
-                                                {{ home_price($detailedProduct->id) }}
-                                                @if($detailedProduct->unit != null)
-                                                    <span>/{{ $detailedProduct->getTranslation('unit') }}</span>
-                                                @endif
-                                            </del>
-                                            <div class="">
-                                                <strong class="h3 fw-600 text-main">
-                                                    {{ home_discounted_price($detailedProduct->id) }}
-                                                </strong>
-                                                @if($detailedProduct->unit != null)
-                                                    <span class="opacity-70">/{{ $detailedProduct->getTranslation('unit') }}</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    @else
-                                        <div class="row no-gutters mt-3">
-                                            <div class="col-sm-2">
-                                                <div class="opacity-50 my-2">{{ translate('Price')}}:</div>
-                                            </div>
-                                            <div class="col-sm-10">
-                                                <div class="">
-                                                    <strong class="h2 fw-600 text-primary">
-                                                        {{ home_discounted_price($detailedProduct->id) }}
-                                                    </strong>
-                                                    @if($detailedProduct->unit != null)
-                                                        <span class="opacity-70">/{{ $detailedProduct->getTranslation('unit') }}</span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
+                                    <a class="text-warning" href="#">{{ $detailedProduct?->c_name ??  ''}}</a>
+
+                                    <div class="d-flex align-items-baseline mt-3">
+                                        <h6 class="mr-2">Generic: </h6>
+                                        <a href="#">{{ $detailedProduct->generic }}</a>
+
+                                    </div>
+
+                                    <div class="d-flex align-items-baseline mb-3">
+                                        <h6 class="mr-2">Weight:</h6>
+                                        <span class="fs-16"> {{ $detailedProduct->weight }}</span>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="d-flex align-items-baseline mb-5">
+                                        <h1 class="fs-18 text-capitalize mr-2">
+                                            best Price:
+                                        </h1>
+                                        <span class="fs-23 font-weight-bold"> {{ $detailedProduct->single_price }}</span>
+                                    </div>
                                     <form id="option-choice-form">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $detailedProduct->id }}">
@@ -142,59 +107,95 @@
                                     <!-- Quantity + Add to cart -->
                                         <div class="row no-gutters">
                                             <div class="col-sm-10">
-                                                <div class="product-quantity d-flex align-items-center">
-                                                    <div class="row no-gutters align-items-center aiz-plus-minus mr-3" style="width: 130px;">
-                                                        <button class="btn col-auto btn-icon btn-sm btn-circle btn-light" type="button" data-type="minus" data-field="quantity" disabled="">
-                                                            <i class="las la-minus"></i>
-                                                        </button>
-                                                        <input type="text" name="quantity" class="col border-0 text-center flex-grow-1 fs-16 input-number" placeholder="1" value="{{ $detailedProduct->min_qty }}" min="{{ $detailedProduct->min_qty }}" max="10" readonly>
-                                                        <button class="btn  col-auto btn-icon btn-sm btn-circle btn-light" type="button" data-type="plus" data-field="quantity">
-                                                            <i class="las la-plus"></i>
-                                                        </button>
-                                                    </div>
+                                                <div class="radiobuttons">
+                                                            <table class="table table-bordered">
+                                                                <tr class="d-flex align-items-center justify-content-between">
+                                                                    <td class="border-0">
+                                                                        <div class="rdio rdio-primary radio-inline">
+                                                                            <input name="type" value="single" id="single" type="radio" checked>
+                                                                            <label for="single">
+                                                                                <strong>Single</strong>
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="border-0">
+                                                                        {{ $detailedProduct->single_price }}
+                                                                    </td>
+                                                                    <td class="border-0">
+                                                                        <div class="row no-gutters align-items-center mr-3" id="single_sec" style="width: 100px;">
+                                                                            <button class="btn col-auto btn-icon btn-sm btn-circle btn-primary decrement"
+                                                                                    type="button">
+                                                                                <i class="las la-minus"></i>
+                                                                            </button>
+                                                                            <input type="text" name="quantity"
+                                                                                   class="col border-0 text-center flex-grow-1 fs-16 bg-transparent"
+                                                                                   placeholder="1" value="1" min="10" max="10" readonly>
 
-                                                    <button type="button"
-                                                            class="btn addToCart bg-main mr-2"
-                                                            @if(Auth::check())
-                                                                onclick="addToCart()"
-                                                            @else
-                                                                onclick="showCheckoutModal()"
-                                                            @endif>
-                                                        <i class="las la-cart-plus"></i>
-                                                    </button>
+                                                                            <button class="btn col-auto btn-icon btn-sm btn-circle btn-success increment"
+                                                                                    type="button">
+                                                                                <i class="las la-plus"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                {{--  active this module after update packet product price --}}
 
+                                                                @if( $detailedProduct->pack_Price != null)
+                                                                    <tr class="d-flex align-items-center justify-content-between">
+                                                                        <td class="border-0">
+                                                                            <div class="rdio rdio-primary radio-inline">
+                                                                                <input name="type" value="packet" id="packet" type="radio">
+                                                                                <label for="packet">
+                                                                                    <strong>Packet</strong>
+                                                                                </label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="border-0">
+                                                                            {{ $detailedProduct->pack_Price }}
+                                                                        </td>
+                                                                        <td class="border-0">
+                                                                            <div class="row no-gutters align-items-center mr-3" id="packet_sec" style="width: 100px;">
+                                                                                <button class="btn col-auto btn-icon btn-sm btn-circle btn-primary decrement"
+                                                                                        disabled
+                                                                                        type="button">
+                                                                                    <i class="las la-minus"></i>
+                                                                                </button>
+                                                                                <input type="text" name="quantity"
+                                                                                       class="col border-0 text-center flex-grow-1 fs-16 bg-transparent"
+                                                                                       placeholder="1" value="1" min="10" max="10" readonly disabled>
+                                                                                <button class="btn col-auto btn-icon btn-sm btn-circle btn-success increment"
+                                                                                        disabled
+                                                                                        type="button">
+                                                                                    <i class="las la-plus"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
+                                                            </table>
 
-                                                </div>
-                                            </div>
-                                        </div>
+                                                        </div>
+                                                <button
+                                                    type="button" class="btn btn-primary mr-2 add-to-cart fw-600"
+                                                    @if(Auth::check())
+                                                    onclick="addToCart()"
+                                                    @else
+                                                    onclick="showCheckoutModal()"
+                                                    @endif
+                                                >
+                                                    <i class="las la-shopping-bag"></i>
+                                                    <span class="d-none d-md-inline-block"> {{ translate('Add to cart')}}</span>
+                                                </button>
+                                                <button type="button" class="btn btn-dark buy-now fw-600"
+                                                        @if(Auth::check())
+                                                        onclick="buyNow()"
+                                                        @else
+                                                        onclick="showCheckoutModal()"
+                                                    @endif
+                                                >
+                                                    <i class="la la-shopping-cart"></i> {{ translate('Buy Now')}}
+                                                </button>
 
-                                        <div class="row no-gutters py-3 d-none" id="chosen_price_div">
-                                            <div class="col-sm-2">
-                                                <div class="opacity-50 my-2">{{ translate('Total Price')}}:</div>
-                                            </div>
-                                            <div class="col-sm-10">
-                                                <div class="product-price">
-                                                    <strong id="chosen_price" class="h4 fw-300 text-primary">
-
-                                                    </strong>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row no-gutters d-none" id="chosen_price_div">
-                                            <div class="col d-flex align-items-center fs-20">
-                                                <span>{{ translate('Sku') }}:</span>
-                                                <div class="product-price fs-18 ml-3">
-                                                   {{ $detailedProduct->slug ?? " " }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row no-gutters d-none" id="chosen_price_div">
-                                            <div class="col d-flex align-items-center fs-20">
-                                                <span>{{ translate('Category') }}:</span>
-                                                <div class="product-price fs-18 ml-3">
-                                                    {{ $detailedProduct->category->name ?? "" }}
-                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -210,29 +211,117 @@
     <section class="mb-4">
         <div class="container">
             <div class="row gutters-10">
-                <div class="col-xl-9 order-0 order-xl-1 offset-md-3">
+                <div class="col-xl-12 order-0 order-xl-1">
                     <div class="bg-white mb-3 shadow-sm rounded">
                         <div class="nav border-main-1 aiz-nav-tabs reviewTab">
                             <a href="#tab_default_1" data-toggle="tab" class="p-3 p-sm-1 text-reset active show">{{ translate('Description')}}</a>
-                            <a href="#tab_default_4" data-toggle="tab" class="p-3 p-sm-1 text-reset">{{ translate('Reviews')}}</a>
+{{--                            <a href="#tab_default_4" data-toggle="tab" class="p-3 p-sm-1 text-reset">{{ translate('Reviews')}}</a>--}}
                             <a href="#tab_default_5" data-toggle="tab" class="p-3 p-sm-1 text-reset">{{ translate('Upload Prescription')}}</a>
                         </div>
 
                         <div class="tab-content pt-0 border border-top-0">
                             <div class="tab-pane fade active show" id="tab_default_1">
                                 <div class="p-4">
-                                    @if($detailedProduct->description != null)
-                                    <div class="mw-100 overflow-hidden text-left">
-                                        <?php echo $detailedProduct->getTranslation('description') ?>
-                                    </div>
-                                    @else
-                                        <div class="text-center fs-18 opacity-70">
-                                            {{  translate('There have been no product details for this product yet.') }}
+                                    @if($detailedProduct->generic != null)
+                                        <div class="mw-100 overflow-hidden text-left">
+                                            <h3 class="details_header">
+                                                Generic
+                                            </h3>
+                                            <p>
+                                                {!! $detailedProduct?->generic !!}
+                                            </p>
                                         </div>
                                     @endif
+                                    @if($detailedProduct->indications != null)
+                                        <div class="mw-100 overflow-hidden text-left">
+                                            <h3 class="details_header">
+                                                Indications
+                                            </h3>
+                                            <p>
+                                                {!! $detailedProduct?->indications !!}
+                                            </p>
+                                        </div>
+                                    @endif
+
+                                    @if($detailedProduct->pharmacology != null)
+                                        <div class="mw-100 overflow-hidden text-left">
+                                            <h3 class="details_header">
+                                                Pharmacology
+                                            </h3>
+                                            <p>
+                                                {!! $detailedProduct?->pharmacology !!}
+                                            </p>
+                                        </div>
+                                    @endif
+                                    @if($detailedProduct->dosage_administration != null)
+                                        <div class="mw-100 overflow-hidden text-left">
+                                            <h3 class="details_header">
+                                                Dosage Administration
+                                            </h3>
+                                            <p>
+                                                {!! $detailedProduct?->dosage_administration !!}
+                                            </p>
+                                        </div>
+                                    @endif
+                                    @if($detailedProduct->contraindications != null)
+                                        <div class="mw-100 overflow-hidden text-left">
+                                            <h3 class="details_header">
+                                                Contraindications
+                                            </h3>
+                                            <p>
+                                                {!! $detailedProduct?->contraindications !!}
+                                            </p>
+                                        </div>
+                                    @endif
+
+                                      @if($detailedProduct->side_Effects != null)
+                                        <div class="mw-100 overflow-hidden text-left">
+                                            <h3 class="details_header">
+                                                Side Effects
+                                            </h3>
+                                            <p>
+                                                {!! $detailedProduct->side_Effects !!}
+                                            </p>
+                                        </div>
+                                     @endif
+
+                                    @if($detailedProduct->pregnancy_and_Lactation != null)
+                                        <div class="mw-100 overflow-hidden text-left">
+                                            <h3 class="details_header">
+                                                Pregnancy And Lactation
+                                            </h3>
+                                            <p>
+                                                {!! $detailedProduct?->pregnancy_and_Lactation !!}
+                                            </p>
+                                        </div>
+                                    @endif
+                                    @if($detailedProduct->therapeutic != null)
+                                        <div class="mw-100 overflow-hidden text-left">
+                                            <h3 class="details_header">
+                                                Therapeutic
+                                            </h3>
+                                            <p>
+                                                {!! $detailedProduct?->therapeutic !!}
+                                            </p>
+                                        </div>
+                                    @endif
+
+                                    @if($detailedProduct->storage_conditions != null)
+                                        <div class="mw-100 overflow-hidden text-left">
+                                            <h3 class="details_header">
+                                                Storage Conditions
+                                            </h3>
+                                            <p>
+                                                {!! $detailedProduct?->storage_conditions !!}
+                                            </p>
+                                        </div>
+                                    @endif
+
+
                                 </div>
                             </div>
 
+                            {{--
                             <div class="tab-pane fade" id="tab_default_4">
                                 <div class="p-4">
                                     <ul class="list-group list-group-flush">
@@ -356,7 +445,7 @@
                                     @endif
                                 </div>
                             </div>
-
+                            --}}
 
 
                             <div class="tab-pane fade" id="tab_default_5">
@@ -502,7 +591,7 @@
                             <input type="text" class="form-control mb-3" name="title" value="{{ $detailedProduct->name }}" placeholder="{{ translate('Product Name') }}" required>
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control" rows="8" name="message" required placeholder="{{ translate('Your Question') }}">{{ route('product', $detailedProduct->slug) }}</textarea>
+                            <textarea class="form-control" rows="8" name="message" required placeholder="{{ translate('Your Question') }}">{{ route('product', ['slug' => $detailedProduct->slug ?? $detailedProduct->name, 'id'=>$detailedProduct->id]) }}</textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -755,4 +844,72 @@
         }
         while (number < 5);
     </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(()=>{
+            function singleOperation(){
+                $("#single_sec .increment").on("click", ()=>{
+                    let inputVal = $("#single_sec input").val();
+                    $("#single_sec input").attr('value', parseInt(inputVal) + 1);
+                })
+                $("#single_sec .decrement").on("click", ()=>{
+                    let inputVal = $("#single_sec input").val();
+                    if (parseInt(inputVal) > 1){
+                        $("#single_sec input").attr('value', parseInt(inputVal) - 1);
+                    }else{
+                        alert("Minimum quantity is 1")
+                    }
+                })
+            }
+            function packetOperation(){
+                $("#packet_sec .increment").on("click", ()=>{
+                    let inputVal = $("#packet_sec input").val();
+                    $("#packet_sec input").attr('value', parseInt(inputVal) + 1);
+                })
+                $("#packet_sec .decrement").on("click", ()=>{
+                    let inputVal = $("#packet_sec input").val();
+                    if (parseInt(inputVal) > 1){
+                        $("#packet_sec input").attr('value', parseInt(inputVal) - 1);
+                    }else{
+                        alert("Minimum quantity is 1")
+                    }
+                })
+            }
+
+            if($("#single").is(":checked")){
+                singleOperation();
+            }
+
+            $("#single").on('click', function (){
+                $("#packet_sec input").attr('value', 1);
+
+                $('#packet_sec button').attr("disabled", true);
+                $('#single_sec button').attr("disabled", false);
+
+                $('#packet_sec input').attr('disabled', 'disabled');
+                $('#single_sec input').removeAttr('disabled');
+
+                if($("#single").is(":checked")){
+                    singleOperation();
+                }
+            })
+
+
+            $("#packet").on('click', function (){
+                $("#single_sec input").attr('value', 1);
+
+                $('#packet_sec button').attr("disabled", false);
+                $('#single_sec button').attr("disabled", true);
+                $('#packet_sec input').removeAttr('disabled');
+                $('#single_sec input').attr('disabled', 'disabled');
+
+                if($("#packet").is(":checked")){
+                    packetOperation();
+                }
+            })
+        })
+    </script>
+
+
 @endsection

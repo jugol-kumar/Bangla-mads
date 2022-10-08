@@ -7,7 +7,7 @@
             $cartQty = count($cart = Session::get('cart'));
             if ( $cartQty> 0){
                 foreach ($cart as $key => $cartItem) {
-                    $total = $total + $cartItem['price'] * $cartItem['quantity'];
+                    $total = $total + (int)$cartItem['price'] * (int)$cartItem['quantity'];
                 }
                  $data = array('total_price'=>$total, 'total_quantity'=> $cartQty);
             }else{
@@ -16,9 +16,9 @@
         }
     @endphp
     <div class="mini-cart" style="top: 50%;">
-            <span class="item-count buttonItemCount">
-                {{ $cart ? $cartQty . " Items" : 0 . "Items"}}
-            </span>
+        <span class="item-count buttonItemCount">
+            {{ $cart ? $cartQty . " Items" : 0 . "Items"}}
+        </span>
         <span class="price-count">
             <span class="price">
                 <span class="price buttonPrice">
@@ -64,25 +64,25 @@
                 <ul class="h-sel-20 overflow-auto c-scrollbar-light list-group list-group-flush">
                     @foreach($cart as $key => $cartItem)
                         @php
-                            $product = \App\Product::find($cartItem['id']);
-                            $total = $total + $cartItem['price']*$cartItem['quantity'];
+                            $product = \App\Models\Medicine::find($cartItem['id']);
+                            //$total = $total + (int)$cartItem['price'] * (int)$cartItem['quantity'];
                         @endphp
                         @if ($product != null)
                             <li class="list-group-item">
                             <span class="d-flex align-items-center">
-                                <a href="{{ route('product', $product->slug) }}" class="text-reset d-flex align-items-center flex-grow-1">
+                                <a href="{{ route('product', ["slug" => $product->slug ?? $product->name, 'id' => $product->id]) }}" class="text-reset d-flex align-items-center flex-grow-1">
                                     <img
-                                        src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                        data-src="{{ uploaded_asset($product->thumbnail_img) }}"
+                                        src="{{ uploaded_asset($product?->category?->icon) ?? static_asset('assets/img/placeholder.jpg') }}"
+                                        data-src="{{ uploaded_asset($product->photo) }}"
                                         class="img-fit lazyload size-60px rounded"
-                                        alt="{{  $product->getTranslation('name')  }}"
+                                        alt="{{  $product->name }}"
                                     >
                                     <span class="minw-0 pl-2 flex-grow-1">
                                         <span class="fw-600 mb-1 text-truncate-2">
-                                                {{  $product->getTranslation('name')  }}
+                                                {{  $product->name  }}
                                         </span>
-                                        <span class="">{{ $cartItem['quantity'] }}x</span>
-                                        <span class="">{{ single_price($cartItem['price']) }}</span>
+                                        <span class="">{{ (int)$cartItem['quantity'] }}x</span>
+                                        <span class="">{{ single_price((int)$cartItem['price']) }}</span>
                                     </span>
                                 </a>
                                 <span class="">
@@ -97,7 +97,9 @@
                 </ul>
                 <div class="px-3 py-2 fs-15 border-top d-flex justify-content-between">
                     <span class="opacity-60">{{translate('Subtotal')}}</span>
-                    <span class="fw-600">{{ single_price($total) }}</span>
+                    <span class="fw-600">
+                        {{$cart ? '৳ '. $total : '৳ '. 0.00 }}
+                    </span>
                 </div>
                 <div class="px-3 py-2 text-center border-top">
                     <ul class="list-inline mb-0">

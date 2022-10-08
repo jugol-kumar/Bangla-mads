@@ -77,8 +77,9 @@ Route::get('/search', 'HomeController@search')->name('search');
 Route::get('/search?q={search}', 'HomeController@search')->name('suggestion.search');
 Route::post('/ajax-search', 'HomeController@ajax_search')->name('search.ajax');
 
-Route::get('/product/{slug}', 'HomeController@product')->name('product');
+Route::get('/product/{slug}/{id}', 'HomeController@product')->name('product');
 Route::get('/category/{category_slug}', 'HomeController@listingByCategory')->name('products.category');
+Route::get('/category/details/{category_slug}', 'HomeController@categoryDetails')->name("category.details");
 Route::get('/brand/{brand_slug}', 'HomeController@listingByBrand')->name('products.brand');
 Route::post('/product/variant_price', 'HomeController@variant_price')->name('products.variant_price');
 Route::get('/shop/{slug}', 'HomeController@shop')->name('shop.visit');
@@ -271,6 +272,7 @@ Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.sho
 
 // loadMore data
 Route::post('/load-more/product-list','HomeController@search')->name('loadmore.load_data');
+Route::get('/load-more/product-list','HomeController@categoryProductLoader')->name('cagoryproduct.loadmore');
 
 // upload user prescription iamge
 Route::post('/prescription/upload', 'HomeController@upload_prescriptin_image')->name('upload.prescription_image');

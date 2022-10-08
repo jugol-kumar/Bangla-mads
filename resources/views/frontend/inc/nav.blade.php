@@ -1,5 +1,5 @@
 <!-- END Top Bar -->
-<header class="@if (get_setting('header_stikcy') == 'on') sticky-top @endif z-1020 bg-white border-bottom shadow-sm">
+<header class="@if (get_setting('header_stikcy') == 'on') sticky-top @endif z-1020 bg-white shadow-sm">
     <div class="position-relative logo-bar-area z-1">
         <div class="container">
             <div class="d-flex align-items-center mb-2 mt-4">
