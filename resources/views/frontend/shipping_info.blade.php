@@ -273,10 +273,10 @@
                            value="{{ App\User::where('user_type', 'admin')->first()->id }}">
                     @if (Auth::check())
 
-                        @if($total < 100)
-                            <button type="reset" class="btn btn-primary fw-600" onclick="showWarning()">{{ $total }}</button>
+                        @if($total < config("app.minimum_cart"))
+                            <button type="button" class="btn btn-primary fw-600" onclick="showWarning()">{{ translate('Continue to Payment') }}</button>
                         @else
-                            <button type="submit" class="btn btn-primary fw-600">{{ translate('Continue to Payment hrer') }}</button>
+                            <button type="submit" class="btn btn-primary fw-600">{{ translate('Continue to Payment') }}</button>
                         @endif
                     @else
                         <button class="btn btn-primary fw-600" onclick="showCheckoutModal()">{{ translate('Continue to Payment') }}</button>
@@ -532,7 +532,7 @@
             $('#GuestCheckout').modal();
         }
         function showWarning(){
-            AIZ.plugins.notify('warning', 'You Need To Bye At-Last 100 Tk');
+            AIZ.plugins.notify('warning', 'You Need To Bye At-Last {{ config("app.minimum_cart") }} Tk');
         }
     </script>
     <script type="text/javascript">

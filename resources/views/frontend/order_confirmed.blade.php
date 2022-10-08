@@ -84,7 +84,7 @@
                                                     <td>{{ $key+1 }}</td>
                                                     <td>
                                                         @if ($orderDetail->product != null)
-                                                            <a href="{{ route('product', $orderDetail->product->slug) }}" target="_blank" class="text-reset">
+                                                            <a href="{{ route('product', [ 'slug' => $orderDetail->product->slug ?? $orderDetail->product->title, 'id' => $orderDetail->product->id]) }}" target="_blank" class="text-reset">
                                                                 {{ $orderDetail->product->getTranslation('name') }}
                                                             </a>
                                                         @else

@@ -130,6 +130,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'minimum_cart' => env('MINIMUM_CART', 100),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
