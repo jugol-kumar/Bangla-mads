@@ -30,51 +30,66 @@
 
 
     <section class="mb-4">
-            <div class="container">
-                <div class="px-2 py-4 px-md-4 py-md-3 rounded">
-                    <div class="d-flex mb-3 align-items-baseline justify-content-center">
-                        <span class="conte pb-3 d-inline-block best_selling_title fw-500 text-main mb-4">{{ translate('Best Selling Option Here') }}</span>
-                    </div>
-                    <div class="aiz-carousel half-outside-arrow mt-5 row-flex"
-                         data-items="6"
-                         data-xl-items="5"
-                         data-lg-items="6"
-                         data-md-items="3"
-                         data-sm-items="2"
-                         data-xs-items="2"
-                         data-arrows='true'
-                         data-infinite='true'
-                         data-autoplay="false">
-                        @foreach ((\App\Models\Medicine::limit(12)->get()) as $key => $product)
-                            <div class="carousel-box">
-                                @include('frontend.partials.single_product_card')
+        <div class="container">
+            <div class="px-2 py-4 px-md-4 py-md-3 rounded">
+                <div class="d-flex mb-3 align-items-baseline justify-content-center">
+                    <h3 class="conte pb-3 d-inline-block best_selling_title text-main mb-4">{{ translate('Featured Products') }}</h3>
+                </div>
+                <div class="aiz-carousel half-outside-arrow mt-5"
+                     data-items="6"
+                     data-xl-items="5"
+                     data-lg-items="6"
+                     data-md-items="3"
+                     data-sm-items="2"
+                     data-xs-items="2"
+                     data-arrows='true'
+                     data-infinite='true'
+                     data-autoplay="false">
+                    @foreach (\App\Models\Medicine::where('fetured_status', 1)->limit(12)->get() as $key => $product)
+                        <div class="carousel-box">
+                            @include('frontend.partials.single_product_card')
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    @if (get_setting('categories_products') != null)
+        @php $categories_products = json_decode(get_setting('categories_products')); @endphp
+        @foreach ($categories_products as $key => $value)
+            @php $category = \App\Category::find($value); @endphp
+            <section class="mb-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card shadow-none border-0 p-0 bg-transparent">
+                        <div class="card-body">
+                            <img class="mr-3 img-fit lazyload" style="max-height: 300px;"
+                                 src="{{ static_asset('frontend/images/placeholder.jpg') }}"
+                                 data-src="{{ uploaded_asset($category->banner) }}"
+                                 alt="{{ translate($category->name) }}">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h3 class="text-uppercase font-weight-bold mt-4 text-main">{{ $category->name}}</h3>
+                                <a class="btn btn-primary" href="{{ route("category.details", $category->slug) }}">View More</a>
                             </div>
-                        @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
 
-
-
-    {{-- offline banner section dd--}}
-
-    @if(json_decode(get_setting('home_banner2_images'), true))
-        <section class="mb-4">
-            <div class="container">
-                <div class="px-2 py-4 px-md-4 py-md-3">
-                    <div class="row">
-                    <div class="col-md-12">
-                        <a href="#">
-                            <img class="img-fluid" style="height: 200px;width: 100%" src="{{uploaded_asset(json_decode(get_setting('home_banner2_images'), true)[1]) }}" alt="">
-                        </a>
-                    </div>
-                </div>
+            <div class="px-2 py-4 px-md-4 py-md-3 rounded">
+                <div class="row row-cols-5 row-flex" id="post_data">
+                    @include('frontend.partials.loadmore_product_listing', ['products' =>\App\Models\Medicine::where('category_id', $category->id)->limit(10)->get() ])
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
+        @endforeach
     @endif
-    {{-- offline banner section dd--}}
+
 
 
     {{-- Best Selling --}}
@@ -87,7 +102,7 @@
         <div class="container">
             <div class="px-2 py-4 px-md-4 py-md-3">
                 <div class="d-flex mb-3 align-items-baseline justify-content-center">
-                    <span class="conte pb-3 d-inline-block best_selling_title fw-500 text-main mb-4">{{ translate('Best Selling Option Here') }}</span>
+                    <span class="conte pb-3 d-inline-block best_selling_title fw-500 text-main mb-4 text-main">{{ translate('Best Selling Option Here') }}</span>
                 </div>
                 <div class="row prescription-section">
                     <div class="col-md-6">
@@ -129,7 +144,7 @@
                     <div class="row category">
                         <div class="col-md-12">
                             <div class="title text-center">
-                                <h4>Why People Love Your Website</h4>
+                                <h3 class="text-main">Why People Love Your Website</h3>
                             </div>
                         </div>
                     </div>
@@ -187,7 +202,7 @@
                     <div class="row category">
                         <div class="col-md-12">
                             <div class="title text-center mt-4">
-                                <h4>WHY CHOOSE BANGLAMEDS ?</h4>
+                                <h3 class="text-main">WHY CHOOSE BANGLAMEDS ?</h3>
                             </div>
                         </div>
                     </div>
@@ -207,65 +222,6 @@
 
 
 
-
-
-    {{-- Top 10 categories and Brands --}}
-    @if (get_setting('categories_products') != null)
-        @php $categories_products = json_decode(get_setting('categories_products')); @endphp
-        @foreach ($categories_products as $key => $value)
-            <section class="mb-4">
-                <div class="">
-                    @php $category = \App\Category::find($value); @endphp
-                    <div class="d-flex align-items-center">
-                        <h3 class="h5 fw-700 mb-0 w-100">
-                            <span class="pb-3 text-center d-inline-block w-100">{{ $category->name }}</span>
-                        </h3>
-                    </div>
-                    <div class="row gutters-10">
-                        <div class="col-lg-12">
-                            <div class="row gutters-5">
-                                @if ($category != null)
-                                    <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-1">
-                                        <div class="position-relative overflow-hidden h-100 bg-white">
-                                            <img class="position-absolute left-0 top-0 img-fit h-100"
-                                                src="{{ uploaded_asset($category->banner) }}"
-                                                alt="{{ $category->name }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-lg-9">
-                                        <div
-                                            class="row gutters-5 row-cols-xxl-4 row-cols-xl-2 row-cols-lg-4 row-cols-md-2 row-cols-2">
-                                            @if (count(\App\Utility\CategoryUtility::get_immediate_children_ids($category->id)) > 0)
-                                                @foreach (\App\Utility\CategoryUtility::get_immediate_children_ids($category->id) as $ids)
-                                                    @php
-                                                        $subcat = \App\Category::find($ids);
-                                                    @endphp
-                                                    <div class="col">
-                                                        <a href="{{ route('products.category', $subcat->slug) }}"
-                                                            class="d-block p-3" tabindex="0">
-                                                            <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}"
-                                                                data-src="{{ uploaded_asset($subcat->banner) }}"
-                                                                alt="{{ $subcat->name }}" class="img-200 lazyload"
-                                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder-rect.jpg') }}';">
-                                                        </a>
-                                                        <h2 class="h6 fw-600 text-truncate text-center">
-                                                            <a href="{{ route('products.category', $subcat->slug) }}"
-                                                                class="text-reset"
-                                                                tabindex="0">{{ $subcat->name }}</a>
-                                                        </h2>
-                                                    </div>
-                                                @endforeach
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        @endforeach
-    @endif
 
 @endsection
 

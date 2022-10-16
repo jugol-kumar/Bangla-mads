@@ -36,11 +36,15 @@
                 <div class="col-md-12">
                     <div class="card shadow-none border-0 p-0 bg-transparent">
                        <div class="card-body">
-                           <img class="mr-3 img-fit lazyload" style="max-height: 300px"
-                                src="{{ static_asset('frontend/images/placeholder.jpg') }}"
-                                data-src="{{ uploaded_asset($category->banner) }}"
-                                alt="{{ translate($category->name) }}">
-                           <h3 class="text-uppercase font-weight-bold mt-4">{{ $category->name}}</h3>
+                           @if(isset($category))
+                               <img class="mr-3 img-fit lazyload" style="max-height: 300px;"
+                                    src="{{ static_asset('frontend/images/placeholder.jpg') }}"
+                                    data-src="{{ uploaded_asset($category->banner) }}"
+                                    alt="{{ translate($category->name) }}">
+                               <h3 class="text-uppercase font-weight-bold mt-4">{{ $category->name}}</h3>
+                           @else
+                               <h3 class="text-uppercase font-weight-bold mt-4">{{ $slug }}</h3>
+                           @endif
                        </div>
                     </div>
                 </div>

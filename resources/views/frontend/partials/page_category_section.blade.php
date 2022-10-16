@@ -3,7 +3,7 @@
         <ul class="list-unstyled">
             @foreach($value as $key => $category)
                 <li class="category_single_li">
-                    <a href="{{ route('category.details', $category->slug) }}">{{ $category->name }}</a></li>
+                    <a class="text-main" href="{{ route('category.details', $category->slug) }}">{{ $category->name }}</a></li>
             @endforeach
         </ul>
     </div>

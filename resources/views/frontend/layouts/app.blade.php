@@ -205,8 +205,10 @@
                                 Upload Prescriptions
                             </a>
                         </li>
-
-                        @foreach (\App\Category::where('level', 0)->get()->take(11) as $key => $category)
+                        @if (get_setting('top10_categories') != null)
+                            @php $categories = json_decode(get_setting('top10_categories')); @endphp
+                            @foreach ($categories as $key => $value)
+                                @php $category = \App\Category::find($value); @endphp
                             @if(count(\App\Utility\CategoryUtility::get_immediate_children_ids($category->id)) > 0)
                                 <li class="nav-item">
                                     <a href="#{{$category->slug}}"
@@ -245,6 +247,7 @@
                                 </li>
                             @endif
                         @endforeach
+                        @endif
                     </ul>
                 </nav>
             </div>

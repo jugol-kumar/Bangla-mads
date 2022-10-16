@@ -102,6 +102,16 @@ class MedicineController extends Controller
         return redirect()->route('medicine.index');
     }
 
+    public function updateFeatured(Request $request)
+    {
+        $product = Medicine::findOrFail($request->id);
+        $product->fetured_status = $request->status;
+        if($product->save()){
+            return 1;
+        }
+        return 0;
+    }
+
 
 
 

@@ -97,7 +97,7 @@
                         </td>
                         <td>
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input onchange="update_featured(this)" value="{{ $product->id }}" type="checkbox" <?php if ($product->featured == 1) echo "checked"; ?> >
+                                <input onchange="update_featured(this)" value="{{ $product->id }}" type="checkbox" <?php if ($product->fetured_status == 1) echo "checked"; ?> >
                                 <span class="slider round"></span>
                             </label>
                         </td>
@@ -208,7 +208,7 @@
             else{
                 var status = 0;
             }
-            $.post('{{ route('products.featured') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status}, function(data){
+            $.post('{{ route('medicine.featured') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status}, function(data){
                 if(data == 1){
                     AIZ.plugins.notify('success', '{{ translate('Featured products updated successfully') }}');
                 }

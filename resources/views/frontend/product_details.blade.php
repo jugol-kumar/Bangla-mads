@@ -79,11 +79,11 @@
 
                                     <h5 class="text-black-50">{{ $detailedProduct->type }}</h5>
 
-                                    <a class="text-warning" href="#">{{ $detailedProduct?->c_name ??  ''}}</a>
+                                    <a class="text-warning" href="{{ route("cname.details", $detailedProduct->c_name) }}">{{ $detailedProduct?->c_name ??  ''}}</a>
 
                                     <div class="d-flex align-items-baseline mt-3">
                                         <h6 class="mr-2">Generic: </h6>
-                                        <a href="#">{{ $detailedProduct->generic }}</a>
+                                        <a href="{{ route("generic.details", $detailedProduct->generic) }}">{{ $detailedProduct->generic }}</a>
 
                                     </div>
 

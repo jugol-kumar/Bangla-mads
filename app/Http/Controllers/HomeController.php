@@ -421,25 +421,42 @@ class HomeController extends Controller
     }
 
     public function categoryDetails(Request $request, $slug){
-
         if ($slug == null){
             return back();
         }
         $category = Category::where('slug', $slug)->first();
         $products = Medicine::where('category_id', $category->id)->where('publication_status', 1)->paginate(20);
-
-//        $s = $products[1]->pack_Price;
-//        $price = explode("৳", $s);
-//        $float = preg_replace('/[^0-9\.]/', "", $price[1]);
-//        return  $float;
-
-
-
         if ($request->ajax()){
             $view = view('frontend.partials.loadmore_product_listing', compact('products'))->render();
             return response()->json(['view' => $view]);
         }
         return view("frontend.single_category_details", compact('products', 'category'));
+    }
+
+    public function cNameDetails(Request $request, $slug){
+        if ($slug == null){
+            return back();
+        }
+
+        $products = Medicine::where('c_name', $slug)->where('publication_status', 1)->paginate(20);
+        if ($request->ajax()){
+            $view = view('frontend.partials.loadmore_product_listing', compact('products'))->render();
+            return response()->json(['view' => $view]);
+        }
+        return view("frontend.single_category_details", compact('products', 'slug'));
+    }
+
+    public function genericDetails(Request $request, $slug){
+        if ($slug == null){
+            return back();
+        }
+
+        $products = Medicine::where('generic', $slug)->where('publication_status', 1)->paginate(20);
+        if ($request->ajax()){
+            $view = view('frontend.partials.loadmore_product_listing', compact('products'))->render();
+            return response()->json(['view' => $view]);
+        }
+        return view("frontend.single_category_details", compact('products', 'slug'));
     }
 
 

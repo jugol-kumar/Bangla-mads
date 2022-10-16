@@ -41,6 +41,7 @@ Route::group(['prefix' => 'panel', 'middleware' => ['auth', 'admin']], function(
     Route::get('/medicines/admin/{id}/edit', 'MedicineController@edit')->name('medicine.edit');
     Route::put('/medicines/admin/{id}/update', 'MedicineController@update')->name('medicine.update');
     Route::get('/medicines/admin/{id}/delete', 'MedicineController@delete')->name('medicine.delete');
+    Route::post('/MedicineController/featured', 'MedicineController@updateFeatured')->name('medicine.featured');
 
 
     Route::resource('sellers', 'SellerController');
