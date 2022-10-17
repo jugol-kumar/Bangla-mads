@@ -477,7 +477,7 @@ padding: 0.3rem 1.2rem;
 
 .side-cart .mini-cart {
     position: absolute;
-    left: -80px;
+    right: 0;
     width: 80px;
     background: #fff;
     box-shadow: 0px 2px 10px 0px #333;
@@ -874,6 +874,9 @@ div#header-cart a.btn-edit {
     color: #fff;
 }
 
+.product_card_image{
+    min-height: 170px !important;
+}
 
 
 /*serach product listing table search_product_list*/
@@ -1082,7 +1085,9 @@ div#header-cart a.btn-edit {
     visibility: visible;
 }
 
-
+.mini-cart{
+    top: 50% !important;
+}
 
 
 
@@ -1116,6 +1121,108 @@ div#header-cart a.btn-edit {
         padding: 6px;
         height: calc(1.3125rem + 1.2rem + -11px);
     }
+
+    .main-content-style{
+        width: 100%;
+        margin-left: 0%;
+    }
+    #preeloader{
+        background-size: 100px !important;
+    }
+
+    .sm_between{
+        justify-content: space-between !important;
+    }
+    .sm_title{
+        font-size: 20px !important;
+    }
+    .product_card_image{
+        min-height: 90px !important;
+    }
+    .medicin_card .card-body h5{
+        font-size: 11px !important;
+    }
+
+    .medicin_card .card-body p{
+        font-size: 8px !important;
+    }
+    .sm_padding{
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+    .medicin_card{
+        border-radius: 5px !important;
+    }
+    .half-outside-arrow .slick-prev{
+        left: -22px;
+    }
+    .half-outside-arrow .slick-next{
+        right: -22px;
+    }
+    .aiz-carousel .slick-arrow{
+        width: 25px !important;
+        height: 25px !important;
+        top: 37% !important;
+        font-size: 10px;
+        line-height: 28px;
+    }
+    .sm_btn{
+        padding: 3px 5px;
+        font-size: 10px;
+    }
+
+    .sm_padding .card{
+        margin-bottom: 0 !important;
+    }
+    .prescription-section h5{
+        font-size: 12px !important;
+        margin-top: 7px !important;
+        margin-bottom: 7px !important;
+        text-align: justify;
+        line-height: 1.5;
+    }
+    .order-butotn{
+        font-size: 15px;
+        padding: 9px 16px;
+    }
+    .sm_doctor_image{
+        height: 100% !important;
+        margin: auto;
+    }
+    .sm_displya_style_end_footer p{
+        font-size: 10px;
+    }
+    #backToTop {
+        width: 30px;
+        height: 30px;
+        bottom: 65px;
+        right: 3px;
+    }
+    #backToTop i{
+        font-size: 17px;
+        position: absolute;
+        top: 8px;
+        left: 7px;
+    }
+    .mini-cart{
+        top: 30% !important;
+    }
+    .side-cart.expanded .mini-cart{
+        display: none;
+    }
+
+    .side-cart .mini-cart span.item-count{
+        padding: 13px 7px 6px;
+    }
+
+    .sm_load_more_image{
+        width: 50px !important;
+        height: 50px !important;
+    }
+    .left-sidebar {
+        background: #f3f7fb;
+        width: inherit !important;
+    }
 }
 
 /*search product show table*/
@@ -1147,6 +1254,18 @@ div#header-cart a.btn-edit {
     .sm_displya_style_end_footer{
         align-items: center !important;
         justify-content: center !important;
+    }
+
+    .side-cart .mini-cart {
+        width: 60px !important;
+    }
+    .margin_left_minus_10{
+        margin-left: -10px !important;
+    }
+    .btn-sm.btn-icon {
+        padding: 0.416rem;
+        width: calc(2.02rem + -6px) !important;
+        height: calc(2.02rem + -6px) !important;
     }
 }
 

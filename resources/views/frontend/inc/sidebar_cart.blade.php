@@ -15,7 +15,7 @@
             }
         }
     @endphp
-    <div class="mini-cart" style="top: 50%;">
+    <div class="mini-cart">
         <span class="item-count buttonItemCount">
             {{ $cart ? $cartQty . " Items" : 0 . "Items"}}
         </span>

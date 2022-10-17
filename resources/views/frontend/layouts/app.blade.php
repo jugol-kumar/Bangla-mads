@@ -167,7 +167,7 @@
 
         @include('frontend.inc.sidebar_cart')
         <div class="d-flex">
-            <div class="left-sidebar ">
+            <div class="left-sidebar">
                 <nav class="navbar" id="sidebar">
 {{--
 
@@ -198,7 +198,6 @@
 --}}
 
                     <ul class="navbar-nav list-unstyled components">
-
                         <li class="upload-res">
                             <a href="#">
                                 <i class="la la-upload"></i>
@@ -371,6 +370,9 @@
             preeloader.style.display="none";
             preeloader.remove();
         });
+        function myFunction(){
+            alert("call me");
+        }
     </script>
 
 
@@ -427,15 +429,22 @@
         });
 
         $('#search').on('keyup', function() {
-            search();
+            var searchKey = $('#search').val();
+            search(searchKey);
+        });
+        $('#search2').on('keyup', function() {
+            var searchKey = $('#search2').val();
+            search(searchKey);
         });
 
         $('#search').on('focus', function() {
-            search();
+            var searchKey = $('#search').val();
+            search(searchKey);
         });
 
-        function search() {
-            var searchKey = $('#search').val();
+        function search(searchKey) {
+            // var searchKey = $('#search').val();
+            // console.log(searchKey)
             if (searchKey.length > 0) {
                 $('body').addClass("typed-search-box-shown");
 

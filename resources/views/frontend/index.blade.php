@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    <div class="home-banner-area mb-4">
+    <div class="home-banner-area mb-0 mb-lg-4">
         <div class="row">
             <div class="col-lg-12 ml-auto">
                 <div class="position-relative">
@@ -29,19 +29,19 @@
     </div>
 
 
-    <section class="mb-4">
+    <section class="mb-0 mb-lg-4">
         <div class="container">
             <div class="px-2 py-4 px-md-4 py-md-3 rounded">
                 <div class="d-flex mb-3 align-items-baseline justify-content-center">
-                    <h3 class="conte pb-3 d-inline-block best_selling_title text-main mb-4">{{ translate('Featured Products') }}</h3>
+                    <h3 class="conte pb-lg-3 pb-0 mb-1 d-inline-block best_selling_title text-main mb-lg-4 sm_title">{{ translate('Featured Products') }}</h3>
                 </div>
                 <div class="aiz-carousel half-outside-arrow mt-5"
                      data-items="6"
                      data-xl-items="5"
                      data-lg-items="6"
                      data-md-items="3"
-                     data-sm-items="2"
-                     data-xs-items="2"
+                     data-sm-items="3"
+                     data-xs-items="3"
                      data-arrows='true'
                      data-infinite='true'
                      data-autoplay="false">
@@ -64,16 +64,16 @@
             <section class="mb-4">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 sm_padding">
                     <div class="card shadow-none border-0 p-0 bg-transparent">
-                        <div class="card-body">
+                        <div class="card-body sm_padding">
                             <img class="mr-3 img-fit lazyload" style="max-height: 300px;"
                                  src="{{ static_asset('frontend/images/placeholder.jpg') }}"
                                  data-src="{{ uploaded_asset($category->banner) }}"
                                  alt="{{ translate($category->name) }}">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <h3 class="text-uppercase font-weight-bold mt-4 text-main">{{ $category->name}}</h3>
-                                <a class="btn btn-primary" href="{{ route("category.details", $category->slug) }}">View More</a>
+                            <div class="d-flex align-items-baseline justify-content-between">
+                                <h3 class="text-uppercase mt-1 mt-lg-4 text-main sm_title">{{ $category->name}}</h3>
+                                <a class="btn btn-primary sm_btn" href="{{ route("category.details", $category->slug) }}">View More</a>
                             </div>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
             </div>
 
             <div class="px-2 py-4 px-md-4 py-md-3 rounded">
-                <div class="row row-cols-5 row-flex" id="post_data">
+                <div class="row row-cols-lg-5 row-cols-3 row-flex" id="post_data">
                     @include('frontend.partials.loadmore_product_listing', ['products' =>\App\Models\Medicine::where('category_id', $category->id)->limit(10)->get() ])
                 </div>
             </div>
@@ -102,33 +102,33 @@
         <div class="container">
             <div class="px-2 py-4 px-md-4 py-md-3">
                 <div class="d-flex mb-3 align-items-baseline justify-content-center">
-                    <span class="conte pb-3 d-inline-block best_selling_title fw-500 text-main mb-4 text-main">{{ translate('Best Selling Option Here') }}</span>
+                    <span class="conte pb-1 pb-lg-3 d-inline-block best_selling_title fw-500 text-main mb-4 text-main sm_title">{{ translate('Best Selling Option Here') }}</span>
                 </div>
                 <div class="row prescription-section">
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-12 col-lg-6">
                         <ul class="list-group bg-transparent">
                             <li class="list-group-item bg-transparent border-0 p-0">
-                                <h5 class="fs-24 my-3" style="color: #30698e">১. প্রেসক্রিপশন এর ছবি তুলে অথবা স্ক্যান করে আপলোড করুন।</h5>
+                                <h5 class="fs-24" style="color: #30698e">১. প্রেসক্রিপশন এর ছবি তুলে অথবা স্ক্যান করে আপলোড করুন।</h5>
                             </li>
                             <li class="list-group-item bg-transparent border-0 p-0">
-                                <h5 class="fs-24 my-3" style="color: #30698e">২. আমাদের ফার্মাসিস্ট আপনার প্রেসক্রিপশন পেয়ে আপনার দেয়া ফোন নাম্বারে যোগাযোগ করবে। ( সকাল ১০টা
+                                <h5 class="fs-24" style="color: #30698e">২. আমাদের ফার্মাসিস্ট আপনার প্রেসক্রিপশন পেয়ে আপনার দেয়া ফোন নাম্বারে যোগাযোগ করবে। ( সকাল ১০টা
                                     থেকে রাত ১০টা )</h5>
                             </li>
                             <li class="list-group-item bg-transparent border-0 p-0">
-                                <h5 class="fs-24 my-3" style="color: #30698e">৩. ফার্মাসিস্ট আপনার সাথে কথা বলে ঔষধ সিলেক্ট করে অর্ডার কনফার্ম করবে।</h5>
+                                <h5 class="fs-24" style="color: #30698e">৩. ফার্মাসিস্ট আপনার সাথে কথা বলে ঔষধ সিলেক্ট করে অর্ডার কনফার্ম করবে।</h5>
                             </li>
                             <li class="list-group-item bg-transparent border-0 p-0">
-                                <h5 class="fs-24 my-3" style="color: #30698e">৪. নির্দিষ্ট সময়ে আপনার ঔষধ/পণ্য ডেলিভারী নিন।</h5>
+                                <h5 class="fs-24" style="color: #30698e">৪. নির্দিষ্ট সময়ে আপনার ঔষধ/পণ্য ডেলিভারী নিন।</h5>
                             </li>
                             <li class="list-group-item bg-transparent border-0 p-0">
-                                <h5 class="fs-24 my-3" style="color: #30698e">৫. ঔষধ ডেলিভারীর সময় আপনার প্রেসক্রিপশন প্রদর্শন করুন।</h5>
+                                <h5 class="fs-24" style="color: #30698e">৫. ঔষধ ডেলিভারীর সময় আপনার প্রেসক্রিপশন প্রদর্শন করুন।</h5>
                             </li>
                         </ul>
                         <button class="btn order-butotn">Upload Prescription</button>
                     </div>
 
-                    <div class="col-md-6">
-                        <img class="img-fluid h-75 float-right" src="{{ static_asset('assets/img/Medicine-bro.svg') }}" alt="">
+                    <div class="col-md-6 col-12 col-lg-6">
+                        <img class="img-fluid sm_doctor_image h-75 float-right" src="{{ static_asset('assets/img/Medicine-bro.svg') }}" alt="">
                     </div>
                 </div>
             </div>
@@ -138,13 +138,13 @@
     {{-- why chose us --}}
 
     <div class="" id="whyChoseUs">
-        <section class="mb-4">
+        <section class="mb-0 mb-lg-4">
             <div class="container">
                 <div class="px-2 py-4 px-md-4 py-md-3">
                     <div class="row category">
                         <div class="col-md-12">
                             <div class="title text-center">
-                                <h3 class="text-main">Why People Love Your Website</h3>
+                                <h3 class="text-main sm_title">Why People Love Your Website</h3>
                             </div>
                         </div>
                     </div>
@@ -196,13 +196,13 @@
 
 
     <div id="whyChoseUs">
-        <section class="mb-4">
+        <section class="mb-0 mb-lg-4">
             <div class="container">
                 <div class="px-2 py-4 px-md-4 py-md-3">
                     <div class="row category">
                         <div class="col-md-12">
                             <div class="title text-center mt-4">
-                                <h3 class="text-main">WHY CHOOSE BANGLAMEDS ?</h3>
+                                <h3 class="text-main sm_title">WHY CHOOSE BANGLAMEDS ?</h3>
                             </div>
                         </div>
                     </div>

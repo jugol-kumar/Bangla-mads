@@ -41,16 +41,16 @@
                                     src="{{ static_asset('frontend/images/placeholder.jpg') }}"
                                     data-src="{{ uploaded_asset($category->banner) }}"
                                     alt="{{ translate($category->name) }}">
-                               <h3 class="text-uppercase font-weight-bold mt-4">{{ $category->name}}</h3>
+                               <h3 class="text-uppercase sm_title text-main mt-4">{{ $category->name}}</h3>
                            @else
-                               <h3 class="text-uppercase font-weight-bold mt-4">{{ $slug }}</h3>
+                               <h3 class="text-uppercase mt-4 sm_title text-main">{{ $slug }}</h3>
                            @endif
                        </div>
                     </div>
                 </div>
             </div>
             @if($products->count() > 0)
-                <div class="row row-cols-5 row-flex" id="post_data">
+                <div class="row row-cols-3 row-cols-lg-5 row-flex" id="post_data">
                     @include('frontend.partials.loadmore_product_listing')
                 </div>
             @else
@@ -60,7 +60,7 @@
             @endif
 
             <div class="text-center is_loading" style="display: none">
-                <img src="{{ static_asset('assets/img/loading.svg') }}" alt="">
+                <img src="{{ static_asset('assets/img/loading.svg') }}" alt="" class="sm_load_more_image">
             </div>
         </div>
     </section>

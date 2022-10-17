@@ -1,8 +1,8 @@
-<div class="col mb-4">
+<div class="col mb-4 sm_padding">
     <a href="{{ route('product', ['slug' => $product->name, 'id' => $product->id]) }}" class="text-black">
         <div class="card medicin_card rounded h-100">
             <img
-                class="card-img-top lazyload p-2" style="min-height: 170px"
+                class="card-img-top lazyload p-2 product_card_image"
                 src="{{ static_asset('assets/img/placeholder.jpg') }}"
                 data-src="{{ uploaded_asset($product->photo ?? $product->category->icon) }}"
                 alt="{{$product->name}}"

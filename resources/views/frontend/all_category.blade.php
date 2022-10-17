@@ -28,7 +28,9 @@
             <div class="mb-3 bg-white shadow-sm rounded">
                 <div class="p-3 border-bottom fs-16 fw-600">
                     <a href="{{ route('products.category', $category->slug) }}" class="d-block rounded bg-white p-2 text-reset shadow-sm" style="height: auto; max-width: 300px;">
-                        <img src="{{ uploaded_asset($category->banner) }}" data-src="{{ uploaded_asset($category->banner) }}" alt="{{  $category->getTranslation('name') }}" class="ls-is-cached lazyloaded" height="78" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
+                        <img src="{{ uploaded_asset($category->banner) }}" data-src="{{ uploaded_asset($category->banner) }}"
+                             alt="{{  $category->getTranslation('name') }}"
+                             class="ls-is-cached lazyloaded w-100" height="78" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
                     </a>
                     <a href="{{ route('products.category', $category->slug) }}" class="text-reset">{{  $category->getTranslation('name') }}</a>
                 </div>
@@ -38,7 +40,11 @@
                         <div class="col-lg-3 col-6 text-left">
                             <h6 class="mb-3">
                                 <a href="{{ route('products.category', \App\Category::find($first_level_id)->slug) }}" class="d-block rounded bg-white p-2 text-reset shadow-sm">
-                                    <img src="{{ uploaded_asset(\App\Category::find($first_level_id)->banner) }}" data-src="{{ uploaded_asset(\App\Category::find($first_level_id)->banner) }}" alt="{{ \App\Category::find($first_level_id)->getTranslation('name') }}" class="ls-is-cached lazyloaded" height="78" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
+                                    <img src="{{ uploaded_asset(\App\Category::find($first_level_id)->icon) }}"
+                                         data-src="{{ uploaded_asset(\App\Category::find($first_level_id)->icon) }}"
+                                         alt="{{ \App\Category::find($first_level_id)->getTranslation('name') }}"
+                                         class="ls-is-cached lazyloaded w-100 h-100"
+                                         height="78" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
                                 </a>
                                 <a class="text-reset fw-600 fs-14" href="{{ route('products.category', \App\Category::find($first_level_id)->slug) }}">{{ \App\Category::find($first_level_id)->getTranslation('name') }}</a>
                             </h6>

@@ -44,7 +44,7 @@
 
 @section('content')
     <section class="mb-4 pt-3">
-        <div class="container">
+        <div class="container sm_padding">
             <div class="bg-transparent rounded p-3">
                 <div class="row">
                     <div class="col-md-12">
@@ -108,10 +108,10 @@
                                         <div class="row no-gutters">
                                             <div class="col-sm-10">
                                                 <div class="radiobuttons">
-                                                            <table class="table table-bordered">
+                                                    <table class="table table-bordered margin_left_minus_10">
                                                                 <tr class="d-flex align-items-center justify-content-between">
                                                                     <td class="border-0">
-                                                                        <div class="rdio rdio-primary radio-inline">
+                                                                        <div class="rdio rdio-primary radio-inline d-flex align-items-baseline">
                                                                             <input name="type" value="single" id="single" type="radio" checked>
                                                                             <label for="single">
                                                                                 <strong>Single</strong>
@@ -143,7 +143,7 @@
                                                                 @if( $detailedProduct->pack_Price != null)
                                                                     <tr class="d-flex align-items-center justify-content-between">
                                                                         <td class="border-0">
-                                                                            <div class="rdio rdio-primary radio-inline">
+                                                                            <div class="rdio rdio-primary radio-inline d-flex align-items-baseline">
                                                                                 <input name="type" value="packet" id="packet" type="radio">
                                                                                 <label for="packet">
                                                                                     <strong>Packet</strong>
@@ -173,8 +173,7 @@
                                                                     </tr>
                                                                 @endif
                                                             </table>
-
-                                                        </div>
+                                                </div>
                                                 <button
                                                     type="button" class="btn btn-primary mr-2 add-to-cart fw-600"
                                                     @if(Auth::check())
