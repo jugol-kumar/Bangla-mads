@@ -164,15 +164,10 @@
 
 
 
-
-
-
-
-
     @if (get_setting('main_header_menu_labels') != null)
         <div class="bg-gray-900 border-top border-gray-200 py-md-1 py-0">
             <nav class="navbar navbar-expand-lg navbar-dark d-md-none d-flex align-items-end justify-content-between">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+                <button class="navbar-toggler" type="button" id="togglebutton"
                     aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -201,27 +196,29 @@
                 </div>
 
                 @auth
-                    <div class="d-block d-lg-none ml-3 mr-0 mt-3">
-                        <div class="" id="auth">
-                            <a href="{{ route('dashboard') }}" class="d-flex align-items-center text-reset">
-                                <i class="la la-home la-2x opacity-80"></i>
-                                <span class="flex-grow-1 ml-1">
+                    <div class="d-flex">
+                        <div class="d-block d-lg-none ml-3 mr-0 mt-3">
+                            <div class="" id="auth">
+                                <a href="{{ route('dashboard') }}" class="d-flex align-items-center text-reset">
+                                    <i class="la la-home la-2x opacity-80"></i>
+                                    <span class="flex-grow-1 ml-1">
                                     <span
                                         class="nav-box-text d-none d-xl-block opacity-70 font-weight-bold text-uppercase">My
                                         Panel</span>
                                 </span>
-                            </a>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="d-block d-lg-none ml-3 mr-0 mt-3">
-                        <div class="" id="auth">
-                            <a href="{{ route('logout') }}" class="d-flex align-items-center text-reset">
-                                <i class="la la-sign-in la-2x opacity-80"></i>
-                                <span class="flex-grow-1 ml-1">
+                        <div class="d-block d-lg-none ml-3 mr-0 mt-3">
+                            <div class="" id="auth">
+                                <a href="{{ route('logout') }}" class="d-flex align-items-center text-reset">
+                                    <i class="la la-sign-in la-2x opacity-80"></i>
+                                    <span class="flex-grow-1 ml-1">
                                     <span
                                         class="nav-box-text d-none d-xl-block opacity-70 font-weight-bold text-uppercase">Logout</span>
                                 </span>
-                            </a>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 @else

@@ -109,71 +109,72 @@
                                             <div class="col-sm-10">
                                                 <div class="radiobuttons">
                                                     <table class="table table-bordered margin_left_minus_10">
-                                                                <tr class="d-flex align-items-center justify-content-between">
-                                                                    <td class="border-0">
-                                                                        <div class="rdio rdio-primary radio-inline d-flex align-items-baseline">
-                                                                            <input name="type" value="single" id="single" type="radio" checked>
-                                                                            <label for="single">
-                                                                                <strong>Single</strong>
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="border-0">
-                                                                        {{ $detailedProduct->single_price }}
-                                                                    </td>
-                                                                    <td class="border-0">
-                                                                        <div class="row no-gutters align-items-center mr-3" id="single_sec" style="width: 100px;">
-                                                                            <button class="btn col-auto btn-icon btn-sm btn-circle btn-primary decrement"
-                                                                                    type="button">
-                                                                                <i class="las la-minus"></i>
-                                                                            </button>
-                                                                            <input type="text" name="quantity"
-                                                                                   class="col border-0 text-center flex-grow-1 fs-16 bg-transparent"
-                                                                                   placeholder="1" value="1" min="10" max="10" readonly>
+                                                        <tr class="d-flex align-items-center justify-content-between">
+                                                            <td class="border-0">
+                                                                <div class="rdio rdio-primary radio-inline d-flex align-items-baseline">
+                                                                    <input name="type" value="single" id="single" type="radio" checked>
+                                                                    <label for="single">
+                                                                        <strong>Single</strong>
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+                                                            <td class="border-0">
+                                                                {{ $detailedProduct->single_price }}
+                                                            </td>
+                                                            <td class="border-0">
+                                                                <div class="row no-gutters align-items-center mr-3" id="single_sec" style="width: 100px;">
+                                                                    <button class="btn col-auto btn-icon btn-sm btn-circle btn-primary decrement"
+                                                                            type="button">
+                                                                        <i class="las la-minus"></i>
+                                                                    </button>
+                                                                    <input type="text" name="quantity"
+                                                                           class="col border-0 text-center flex-grow-1 fs-16 bg-transparent"
+                                                                           placeholder="1" value="1" min="10" max="10" readonly>
 
-                                                                            <button class="btn col-auto btn-icon btn-sm btn-circle btn-success increment"
-                                                                                    type="button">
-                                                                                <i class="las la-plus"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                {{--  active this module after update packet product price --}}
+                                                                    <button class="btn col-auto btn-icon btn-sm btn-circle btn-success increment"
+                                                                            type="button">
+                                                                        <i class="las la-plus"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        {{--  active this module after update packet product price --}}
 
-                                                                @if( $detailedProduct->pack_Price != null)
-                                                                    <tr class="d-flex align-items-center justify-content-between">
-                                                                        <td class="border-0">
-                                                                            <div class="rdio rdio-primary radio-inline d-flex align-items-baseline">
-                                                                                <input name="type" value="packet" id="packet" type="radio">
-                                                                                <label for="packet">
-                                                                                    <strong>Packet</strong>
-                                                                                </label>
-                                                                            </div>
-                                                                        </td>
-                                                                        <td class="border-0">
-                                                                            {{ $detailedProduct->pack_Price }}
-                                                                        </td>
-                                                                        <td class="border-0">
-                                                                            <div class="row no-gutters align-items-center mr-3" id="packet_sec" style="width: 100px;">
-                                                                                <button class="btn col-auto btn-icon btn-sm btn-circle btn-primary decrement"
-                                                                                        disabled
-                                                                                        type="button">
-                                                                                    <i class="las la-minus"></i>
-                                                                                </button>
-                                                                                <input type="text" name="quantity"
-                                                                                       class="col border-0 text-center flex-grow-1 fs-16 bg-transparent"
-                                                                                       placeholder="1" value="1" min="10" max="10" readonly disabled>
-                                                                                <button class="btn col-auto btn-icon btn-sm btn-circle btn-success increment"
-                                                                                        disabled
-                                                                                        type="button">
-                                                                                    <i class="las la-plus"></i>
-                                                                                </button>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endif
-                                                            </table>
+                                                        @if( $detailedProduct->pack_Price != null)
+                                                            <tr class="d-flex align-items-center justify-content-between">
+                                                                <td class="border-0">
+                                                                    <div class="rdio rdio-primary radio-inline d-flex align-items-baseline">
+                                                                        <input name="type" value="packet" id="packet" type="radio">
+                                                                        <label for="packet">
+                                                                            <strong>Packet</strong>
+                                                                        </label>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="border-0">
+                                                                    {{ $detailedProduct->pack_Price }}
+                                                                </td>
+                                                                <td class="border-0">
+                                                                    <div class="row no-gutters align-items-center mr-3" id="packet_sec" style="width: 100px;">
+                                                                        <button class="btn col-auto btn-icon btn-sm btn-circle btn-primary decrement"
+                                                                                disabled
+                                                                                type="button">
+                                                                            <i class="las la-minus"></i>
+                                                                        </button>
+                                                                        <input type="text" name="quantity"
+                                                                               class="col border-0 text-center flex-grow-1 fs-16 bg-transparent"
+                                                                               placeholder="1" value="1" min="10" max="10" readonly disabled>
+                                                                        <button class="btn col-auto btn-icon btn-sm btn-circle btn-success increment"
+                                                                                disabled
+                                                                                type="button">
+                                                                            <i class="las la-plus"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        @endif
+                                                    </table>
                                                 </div>
+
                                                 <button
                                                     type="button" class="btn btn-primary mr-2 add-to-cart fw-600"
                                                     @if(Auth::check())
@@ -186,15 +187,14 @@
                                                     <span class="d-none d-md-inline-block"> {{ translate('Add to cart')}}</span>
                                                 </button>
                                                 <button type="button" class="btn btn-dark buy-now fw-600"
-                                                        @if(Auth::check())
-                                                        onclick="buyNow()"
-                                                        @else
-                                                        onclick="showCheckoutModal()"
+                                                    @if(Auth::check())
+                                                    onclick="buyNow()"
+                                                    @else
+                                                    onclick="showCheckoutModal()"
                                                     @endif
                                                 >
                                                     <i class="la la-shopping-cart"></i> {{ translate('Buy Now')}}
                                                 </button>
-
                                             </div>
                                         </div>
                                     </form>

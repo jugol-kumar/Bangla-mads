@@ -91,7 +91,14 @@ class OrderController extends Controller
 
     public function all_orders_show($id)
     {
-         $order = Order::findOrFail(decrypt($id));
+         $order = Order::findOrFail(decrypt($id))->load('orderDetails', 'orderDetails.product');
+
+
+//
+//         return $order;
+//         exit();
+
+
          return view('backend.sales.all_orders.show', compact('order'));
     }
 

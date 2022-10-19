@@ -11,8 +11,8 @@
             <div class="col text-center text-md-left">
             </div>
             @php
-            $delivery_status = $order->orderDetails->first()->delivery_status;
-            $payment_status = $order->orderDetails->first()->payment_status;
+                $delivery_status = $order->orderDetails->first()->delivery_status;
+                $payment_status = $order->orderDetails->first()->payment_status;
             @endphp
             <div class="col-md-3 ml-auto">
                 <label for=update_payment_status"">{{translate('Payment Status')}}</label>
@@ -137,8 +137,8 @@
                             <td>{{ $key+1 }}</td>
                             <td>
                                 @if ($orderDetail->product != null)
-                                <a href="{{ route('product', [ 'slug' => $orderDetail->product->slug ?? $orderDetail->product->title, 'id' => $orderDetail->product->id])  }}" target="_blank">
-                                    <img height="50" src="{{ uploaded_asset($orderDetail->product->thumbnail_img) }}">
+                                <a href="{{ route('product', [ 'slug' => $orderDetail->product->slug ?? $orderDetail->product->name, 'id' => $orderDetail->product->id])  }}" target="_blank">
+                                    <img height="50" src="{{ uploaded_asset($orderDetail->product->photo ?? $orderDetail->product->category->icon) }}">
                                 </a>
                                 @else
                                 <strong>{{ translate('N/A') }}</strong>
@@ -146,7 +146,7 @@
                             </td>
                             <td>
                                 @if ($orderDetail->product != null)
-                                <strong><a href="{{ route('product', [ 'slug' => $orderDetail->product->slug ?? $orderDetail->product->title, 'id' => $orderDetail->product->id])  }}" target="_blank" class="text-muted">{{ $orderDetail->product->getTranslation('name') }}</a></strong>
+                                <strong><a href="{{ route('product', [ 'slug' => $orderDetail->product->slug ?? $orderDetail->product->name, 'id' => $orderDetail->product->id])  }}" target="_blank" class="text-muted">{{ $orderDetail->product->name}}</a></strong>
                                 <small>{{ $orderDetail->variation }}</small>
                                 @else
                                 <strong>{{ translate('Product Unavailable') }}</strong>
@@ -158,7 +158,7 @@
                                 @elseif ($orderDetail->shipping_type == 'pickup_point')
 
                                 @if ($orderDetail->pickup_point != null)
-                                {{ $orderDetail->pickup_point->getTranslation('name') }} ({{ translate('Pickup Point') }})
+                                {{ $orderDetail->pickup_point->name }} ({{ translate('Pickup Point') }})
                                 @else
                                 {{ translate('Pickup Point') }}
                                 @endif

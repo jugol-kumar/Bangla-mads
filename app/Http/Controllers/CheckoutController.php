@@ -80,7 +80,6 @@ class CheckoutController extends Controller
                         $request->session()->forget('coupon_discount');
                         $request->session()->forget('club_point');
 
-
                         flash(translate("Your order has been placed successfully"))->success();
                         return redirect()->route('order_confirmed');
 
@@ -538,6 +537,9 @@ class CheckoutController extends Controller
     {
         $order = Order::findOrFail(Session::get('order_id'))->load('orderDetails');
 
+        if ($order){
+            Session::forget('cart');
+        }
 
         return view('frontend.order_confirmed', compact('order'));
     }

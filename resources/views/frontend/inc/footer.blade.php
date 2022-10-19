@@ -79,17 +79,17 @@
 </footer>
 
 
-<div class="aiz-mobile-bottom-nav d-xl-none fixed-bottom bg-yellow shadow-lg border-top">
+<div class="aiz-mobile-bottom-nav d-xl-none fixed-bottom bg-main shadow-lg border-top">
     <div class="d-flex justify-content-around align-items-center">
-        <a href="{{ route('home') }}" class="text-reset flex-grow-1 text-center py-3 border-right border-success {{ areActiveRoutes(['home'],'bg-soft-primary')}}">
+        <a href="{{ route('home') }}" class="text-reset flex-grow-1 text-center py-3 border-right  border-gray{{ areActiveRoutes(['home'],'bg-soft-primary')}}">
             <i class="las la-campground la-2x"></i>
         </a>
-        <a href="{{ route('categories.all') }}" class="text-reset flex-grow-1 text-center py-3 border-right border-success {{ areActiveRoutes(['categories.all'],'bg-soft-primary')}}">
+        <a href="{{ route('categories.all') }}" class="text-reset flex-grow-1 text-center py-3 border-right border-gray {{ areActiveRoutes(['categories.all'],'bg-soft-primary')}}">
             <span class="d-inline-block position-relative px-2">
                 <i class="las la-table la-2x"></i>
             </span>
         </a>
-        <a href="{{ route('cart') }}" class="text-reset flex-grow-1 text-center py-3 border-right border-success {{ areActiveRoutes(['cart'],'bg-soft-primary')}}">
+        <a href="{{ route('cart') }}" class="text-reset flex-grow-1 text-center py-3 border-right  border-gray{{ areActiveRoutes(['cart'],'bg-soft-primary')}}">
             <span class="d-inline-block position-relative px-2">
                 <i class="las la-cart-arrow-down la-2x"></i>
                 @if(Session::has('cart'))
