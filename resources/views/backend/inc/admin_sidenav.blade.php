@@ -32,11 +32,13 @@
                                     <span class="aiz-side-nav-text">{{ translate('Shop Admin Product Sale') }}</span>
                                 </a>
                             </li>
+                            {{--
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('seller_sale_report.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller_sale_report.index'])}}">
                                     <span class="aiz-side-nav-text">{{ translate('Vendor Products Sale') }}</span>
                                 </a>
                             </li>
+                            --}}
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('stock_report.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['stock_report.index'])}}">
                                     <span class="aiz-side-nav-text">{{ translate('Products Stock Report') }}</span>
@@ -52,11 +54,13 @@
                                     <span class="aiz-side-nav-text">{{ translate('User Searches Report') }}</span>
                                 </a>
                             </li>
+                            {{--
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('commission-log.index') }}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('All Commission History') }}</span>
                                 </a>
                             </li>
+                            --}}
                         </ul>
                     </li>
                 @endif
@@ -77,21 +81,23 @@
                                 </a>
                             </li>
                         @endif
-
-                        @if(Auth::user()->user_type == 'admin' || in_array('4', json_decode(Auth::user()->staff->role->permissions)))
-                            <li class="aiz-side-nav-item">
-                                <a href="{{ route('inhouse_orders.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['inhouse_orders.index', 'inhouse_orders.show'])}}" >
-                                    <span class="aiz-side-nav-text">{{translate('Shop Admin Orders')}}</span>
-                                </a>
-                            </li>
-                        @endif
-                        @if(Auth::user()->user_type == 'admin' || in_array('5', json_decode(Auth::user()->staff->role->permissions)))
-                          <li class="aiz-side-nav-item">
-                            <a href="{{ route('seller_orders.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller_orders.index', 'seller_orders.show'])}}">
-                                <span class="aiz-side-nav-text">{{translate('Vendor Orders')}}</span>
-                            </a>
-                        </li>
-                        @endif
+                            {{--
+                                               @if(Auth::user()->user_type == 'admin' || in_array('4', json_decode(Auth::user()->staff->role->permissions)))
+                                                   <li class="aiz-side-nav-item">
+                                                       <a href="{{ route('inhouse_orders.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['inhouse_orders.index', 'inhouse_orders.show'])}}" >
+                                                           <span class="aiz-side-nav-text">{{translate('Shop Admin Orders')}}</span>
+                                              </a>
+                                                   </li>
+                                               @endif
+                                                   {{--
+                                               @if(Auth::user()->user_type == 'admin' || in_array('5', json_decode(Auth::user()->staff->role->permissions)))
+                                                 <li class="aiz-side-nav-item">
+                                                   <a href="{{ route('seller_orders.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller_orders.index', 'seller_orders.show'])}}">
+                                                       <span class="aiz-side-nav-text">{{translate('Vendor Orders')}}</span>
+                                                   </a>
+                                               </li>
+                                               @endif
+                                               --}}
 
                         @if(Auth::user()->user_type == 'admin' || in_array('6', json_decode(Auth::user()->staff->role->permissions)))
                             <li class="aiz-side-nav-item">
@@ -279,7 +285,7 @@
                         </ul>
                     </li>
                 @endif
-
+{{--
                 <!-- Sellers -->
                 @if((Auth::user()->user_type == 'admin' || in_array('9', json_decode(Auth::user()->staff->role->permissions))) && \App\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
                     <li class="aiz-side-nav-item">
@@ -334,7 +340,7 @@
                         </ul>
                     </li>
                 @endif
-
+--}}
 
                 <!-- Support -->
                 @if(Auth::user()->user_type == 'admin' || in_array('12', json_decode(Auth::user()->staff->role->permissions)))

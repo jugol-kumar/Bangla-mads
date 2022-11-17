@@ -2,7 +2,7 @@
 <nav class="navbar" id="sidebar">
     <ul class="navbar-nav list-unstyled components">
         <li class="upload-res">
-            <a href="#">
+            <a href="#upload_prescriptoins">
                 <i class="la la-upload"></i>
                 Upload Prescriptions
             </a>

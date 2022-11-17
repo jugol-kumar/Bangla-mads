@@ -30,15 +30,15 @@
         <div class="card-body">
             <table class="table aiz-table mb-0">
                 <thead>
-                    <tr>
-                        <th>{{ translate('#SL') }}</th>
-                        <th data-breakpoints="md">{{ translate('User Name') }}</th>
-                        <th data-breakpoints="md">{{ translate('Product Name') }}</th>
-                        <th data-breakpoints="md">{{ translate('Message') }}</th>
-                        <th data-breakpoints="md">{{ translate('Images') }}</th>
-                        <th data-breakpoints="md">{{ translate('Status') }}</th>
-                        <th data-breakpoints="md">{{ translate('Action') }}</th>
-                    </tr>
+                <tr>
+                    <th>{{ translate('#SL') }}</th>
+                    <th data-breakpoints="md">{{ translate('User Name') }}</th>
+                    <th data-breakpoints="md">{{ translate('Product Name') }}</th>
+                    <th data-breakpoints="md">{{ translate('Message') }}</th>
+                    <th data-breakpoints="md">{{ translate('Images') }}</th>
+                    <th data-breakpoints="md">{{ translate('Status') }}</th>
+                    <th data-breakpoints="md">{{ translate('Action') }}</th>
+                </tr>
                 </thead>
                 <tbody>
                 @foreach ($prescriptions as $key => $pre)
@@ -47,14 +47,14 @@
                         <td>
                             @if ($pre->user != null)
                                 {{ $pre->user->name  }}
-{{--                                <a href="{{route('customers.login', encrypt($pre->user->id))}}">{{ $pre->user->name  }}</a>--}}
+                                {{--                                <a href="{{route('customers.login', encrypt($pre->user->id))}}">{{ $pre->user->name  }}</a>--}}
                             @else
                                 Guest ({{ $pre->guest_id }})
                             @endif
                         </td>
                         <td>
                             @if($pre->product)
-                                <a href="{{ route('product', $pre->product->slug) }}" target="_blank">{{ $pre->product->name }}</a>
+                                <a href="{{ route('product', ['slug' => $pre->product->slug ?? $pre->product->name, 'id' => $pre->product->id]) }}" target="_blank">{{ $pre->product->name }}</a>
                             @else
                                 null
                             @endif
@@ -79,14 +79,13 @@
                             @endif
                         </td>
                         <td>
-                            <button class="btn btn-soft-primary btn-icon btn-circle btn-sm" data-id="{{ $pre->id }}" id="showPrescriptoin" title="{{ translate('View Prescription') }}">
+                            <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{ route("prescription.show", $pre->id) }}" id="showPrescriptoin" title="{{ translate('View Prescription') }}">
                                 <i class="las la-eye"></i>
-                            </button>
-                            @if ($pre->status)
-                                <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('orders.destroy', $pre->id)}}" title="{{ translate('Cancel') }}">
+                                </button>
+
+                                <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{ route("prescription.delete", $pre->id) }}" title="{{ translate('Cancel') }}">
                                     <i class="las la-trash"></i>
                                 </a>
-                            @endif
                         </td>
                     </tr>
 

@@ -387,7 +387,7 @@ class HomeController extends Controller
     public function ajax_search(Request $request)
     {
         $keywords = array();
-        $products = Product::where('published', 1)->where('tags', 'like', '%'.$request->search.'%')->get();
+        $products = Medicine::where('publication_status', 1)->where('name', 'LIKE', $request->search.'%')->get();
         foreach ($products as $key => $product) {
             foreach (explode(',',$product->tags) as $key => $tag) {
                 if(stripos($tag, $request->search) !== false){
@@ -403,14 +403,15 @@ class HomeController extends Controller
             }
         }
 
-        $products = filter_products(Product::where('published', 1)->where('name', 'like', '%'.$request->search.'%'))->get()->take(3);
+//        $products = Medicine::where('publication_status', 1)->where('name', 'like', '%'.$request->search.'%')->get()->take(10);
+        $products = Medicine::where('name', 'LIKE', $request->search.'%')->where('publication_status', 1)->get()->take(10);
 
-        $categories = Category::where('name', 'like', '%'.$request->search.'%')->get()->take(3);
+//        return $products;
 
-        $shops = Shop::whereIn('user_id', verified_sellers_id())->where('name', 'like', '%'.$request->search.'%')->get()->take(3);
+        $categories = Category::where('name', 'like', $request->search.'%')->get()->take(5);
 
-        if(sizeof($keywords)>0 || sizeof($categories)>0 || sizeof($products)>0 || sizeof($shops) >0){
-            return view('frontend.partials.search_content', compact('products', 'categories', 'keywords', 'shops'));
+        if(sizeof($keywords)>0 || sizeof($categories)>0 || sizeof($products)>0){
+            return view('frontend.partials.search_content', compact('products', 'categories', 'keywords'));
         }
         return '0';
     }
@@ -1179,5 +1180,19 @@ class HomeController extends Controller
     }
 
 
+    public function deletePrescrition($id){
+        $pre = UserPrescription::findOrFail($id);
+        $pre->delete();
+
+        flash("Prescription Deleted Successfully Done.")->success();
+        return back();
+    }
+
+
+    public function showPrescrition($id){
+        $pre = UserPrescription::findOrFail($id);
+
+        return view('backend.sales.customer_prescription.show', compact('pre'));
+    }
 
 }

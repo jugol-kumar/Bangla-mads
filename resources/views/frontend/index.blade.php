@@ -98,11 +98,12 @@
     </div>
 
 
-    <section>
+    <section id="upload_prescriptoins">
         <div class="container">
             <div class="px-2 py-4 px-md-4 py-md-3">
                 <div class="d-flex mb-3 align-items-baseline justify-content-center">
-                    <span class="conte pb-1 pb-lg-3 d-inline-block best_selling_title fw-500 text-main mb-4 text-main sm_title">{{ translate('Best Selling Option Here') }}</span>
+                    <span class="conte pb-1 pb-lg-3 d-inline-block best_selling_title fw-500 text-main mb-4 text-main sm_title">
+                        {{ translate('Why Need Upload Prescriptions?') }}</span>
                 </div>
                 <div class="row prescription-section">
                     <div class="col-md-6 col-12 col-lg-6">
@@ -124,7 +125,9 @@
                                 <h5 class="fs-24" style="color: #30698e">৫. ঔষধ ডেলিভারীর সময় আপনার প্রেসক্রিপশন প্রদর্শন করুন।</h5>
                             </li>
                         </ul>
+                        {{--
                         <button class="btn order-butotn">Upload Prescription</button>
+                        --}}
                     </div>
 
                     <div class="col-md-6 col-12 col-lg-6">
@@ -144,7 +147,7 @@
                     <div class="row category">
                         <div class="col-md-12">
                             <div class="title text-center">
-                                <h3 class="text-main sm_title">Why People Love Your Website</h3>
+                                <h3 class="text-main sm_title">Why People Love Your Website ?</h3>
                             </div>
                         </div>
                     </div>
@@ -202,7 +205,7 @@
                     <div class="row category">
                         <div class="col-md-12">
                             <div class="title text-center mt-4">
-                                <h3 class="text-main sm_title">WHY CHOOSE BANGLAMEDS ?</h3>
+                                <h3 class="text-main sm_title">All Available Category In Medihelp ?</h3>
                             </div>
                         </div>
                     </div>

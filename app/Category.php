@@ -5,6 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App;
 
+/**
+ * @method static where(string $string, string $string1, string $string2)
+ */
 class Category extends Model
 {
     public function getTranslation($field = '', $lang = false){

@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
+/**
+ * @method static where(string $string, string $string1, string $string2)
+ */
 class Medicine extends Model
 {
     use HasFactory;

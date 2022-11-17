@@ -278,3 +278,5 @@ Route::get('/load-more/product-list','HomeController@categoryProductLoader')->na
 
 // upload user prescription iamge
 Route::post('/prescription/upload', 'HomeController@upload_prescriptin_image')->name('upload.prescription_image');
+Route::get("/prescriptions/delete/{id}", 'HomeController@deletePrescrition')->name('prescription.delete');
+Route::get("/prescriptions/show/{id}", 'HomeController@showPrescrition')->name('prescription.show');
